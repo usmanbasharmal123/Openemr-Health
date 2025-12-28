@@ -1,34 +1,29 @@
 // -------------------------
-// SAFE Helper: Extract Test Summary (Windows compatible)
+// SAFE Helper: Extract Test Summary (string parsing only)
 // -------------------------
 def getTestSummary() {
     def summary = [passed: 0, failed: 0, skipped: 0]
 
-    // List XML files using Windows dir command
-    bat(script: 'dir /b target\\surefire-reports\\*.xml > xml_list.txt', returnStatus: true)
-
-    if (!fileExists('xml_list.txt')) {
+    if (!fileExists("target/surefire-reports/testng-results.xml")) {
         return summary
     }
 
-    def xmlList = readFile('xml_list.txt').split("\r?\n")
+    def content = readFile("target/surefire-reports/testng-results.xml")
 
-    xmlList.each { fileName ->
-        if (fileName.trim()) {
-            def xmlContent = readFile("target/surefire-reports/${fileName}")
-            def xml = new XmlSlurper().parseText(xmlContent)
+    // Extract numbers using regex (sandbox-safe)
+    def tests    = (content =~ /total="(\d+)"/)[0][1].toInteger()
+    def failures = (content =~ /failed="(\d+)"/)[0][1].toInteger()
+    def skipped  = (content =~ /skipped="(\d+)"/)[0][1].toInteger()
 
-            summary.passed  += xml.@tests.toInteger() - xml.@failures.toInteger() - xml.@errors.toInteger() - xml.@skipped.toInteger()
-            summary.failed  += xml.@failures.toInteger() + xml.@errors.toInteger()
-            summary.skipped += xml.@skipped.toInteger()
-        }
-    }
+    summary.failed  = failures
+    summary.skipped = skipped
+    summary.passed  = tests - failures - skipped
 
     return summary
 }
 
 // -------------------------
-// SAFE Helper: Screenshot Gallery (Windows compatible)
+// SAFE Helper: Screenshot Gallery (Windows dir + readFile)
 // -------------------------
 def buildScreenshotGallery() {
     bat(script: 'dir /b screenshots\\*.png > screenshot_list.txt', returnStatus: true)
@@ -87,6 +82,7 @@ def generateTestChart(summary) {
     </div>
     """
 }
+
 
 // -------------------------
 // Main Pipeline
