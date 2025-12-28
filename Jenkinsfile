@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         MAVEN_TOOL = 'Maven-3'
-        JDK_TOOL   = 'JDK-17'
+        JDK_TOOL   = 'JDK-21'
 
         EMAIL_RECIPIENTS = 'your.email@gmail.com'
     }
