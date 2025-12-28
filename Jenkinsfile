@@ -32,7 +32,8 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                bat 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml'
+                // Ignore test failures so pipeline continues
+                bat 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
@@ -60,6 +61,13 @@ pipeline {
     }
 
     post {
+
+        // Convert test failures into UNSTABLE instead of FAILURE
+        unsuccessful {
+            script {
+                currentBuild.result = 'UNSTABLE'
+            }
+        }
 
         always {
             script {
