@@ -1,45 +1,62 @@
 // -------------------------
-// SAFE Helper: Extract Test Summary
+// SAFE Helper: Extract Test Summary (Windows compatible)
 // -------------------------
 def getTestSummary() {
     def summary = [passed: 0, failed: 0, skipped: 0]
 
-    def xmlFiles = findFiles(glob: 'target/surefire-reports/*.xml')
-    if (!xmlFiles) return summary
+    // List XML files using Windows dir command
+    bat(script: 'dir /b target\\surefire-reports\\*.xml > xml_list.txt', returnStatus: true)
 
-    xmlFiles.each { f ->
-        def xml = new XmlSlurper().parseText(readFile(f.path))
-        summary.passed  += xml.@tests.toInteger() - xml.@failures.toInteger() - xml.@errors.toInteger() - xml.@skipped.toInteger()
-        summary.failed  += xml.@failures.toInteger() + xml.@errors.toInteger()
-        summary.skipped += xml.@skipped.toInteger()
+    if (!fileExists('xml_list.txt')) {
+        return summary
+    }
+
+    def xmlList = readFile('xml_list.txt').split("\r?\n")
+
+    xmlList.each { fileName ->
+        if (fileName.trim()) {
+            def xmlContent = readFile("target/surefire-reports/${fileName}")
+            def xml = new XmlSlurper().parseText(xmlContent)
+
+            summary.passed  += xml.@tests.toInteger() - xml.@failures.toInteger() - xml.@errors.toInteger() - xml.@skipped.toInteger()
+            summary.failed  += xml.@failures.toInteger() + xml.@errors.toInteger()
+            summary.skipped += xml.@skipped.toInteger()
+        }
     }
 
     return summary
 }
 
 // -------------------------
-// SAFE Helper: Screenshot Gallery
+// SAFE Helper: Screenshot Gallery (Windows compatible)
 // -------------------------
 def buildScreenshotGallery() {
-    def files = findFiles(glob: 'screenshots/*.png')
+    bat(script: 'dir /b screenshots\\*.png > screenshot_list.txt', returnStatus: true)
 
-    if (!files || files.size() == 0) {
+    if (!fileExists('screenshot_list.txt')) {
+        return "<p>No screenshots found.</p>"
+    }
+
+    def list = readFile('screenshot_list.txt').split("\r?\n")
+    if (!list || list.size() == 0) {
         return "<p>No screenshots found.</p>"
     }
 
     def html = "<table><tr>"
 
-    files.each { f ->
-        def fileUrl = "${env.BUILD_URL}artifact/${f.path}"
-        html += """
-            <td style='padding:10px; text-align:center;'>
-                <a href='${fileUrl}' target='_blank'>
-                    <img src='${fileUrl}' width='200' style='border:1px solid #ccc;'/>
-                </a>
-                <br/>
-                <small>${f.name}</small>
-            </td>
-        """
+    list.each { fileName ->
+        if (fileName.trim()) {
+            def fileUrl = "${env.BUILD_URL}artifact/screenshots/${fileName}"
+            html += """
+                <td style='padding:10px; text-align:center;'>
+                    <a href='${fileUrl}' target='_blank'>
+                        <img src='${fileUrl}' width='200' style='border:1px solid #ccc;'/>
+                    </a>
+                    <br/>
+                    <small>${fileName}</small>
+                </td>
+            """
+        }
     }
 
     html += "</tr></table>"
@@ -161,37 +178,21 @@ pipeline {
 
 <h2 style="color:#2E86C1;">OpenEMR Automation Test Report</h2>
 
-<p>Hello Team,</p>
-<p>The automated test execution has completed. Below is the summary:</p>
-
-<h3 style="color:#117A65;">📊 Test Summary</h3>
-
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
+<h3>📊 Test Summary</h3>
+<table border="1" cellpadding="6" cellspacing="0">
 <tr><th>Passed</th><td>${summary.passed}</td></tr>
 <tr><th>Failed</th><td>${summary.failed}</td></tr>
 <tr><th>Skipped</th><td>${summary.skipped}</td></tr>
 </table>
 
-<br/>
-
-<h3 style="color:#884EA0;">📈 Test Result Chart</h3>
+<h3>📈 Test Result Chart</h3>
 ${chart}
 
-<br/>
+<h3>📄 HTML Report</h3>
+<a href="${reportUrl}">OpenEMR Automation HTML Report</a>
 
-<h3 style="color:#117A65;">📄 Clickable HTML Report</h3>
-<p>
-    <a href="${reportUrl}" style="font-size:16px; color:#1F618D;">
-        👉 OpenEMR Automation HTML Report
-    </a>
-</p>
-
-<br/>
-
-<h3 style="color:#B03A2E;">📸 Screenshots</h3>
+<h3>📸 Screenshots</h3>
 ${screenshots}
-
-<br/><br/>
 
 <p>Regards,<br/>Jenkins CI</p>
 
