@@ -29,17 +29,10 @@
 
     <dependencies>
 
-        <!-- Selenium -->
+        <!-- Selenium (includes DevTools internally) -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
-
-        <!-- FIX FOR CHROME 143 CDP -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v143</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
@@ -113,7 +106,6 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <!-- PROFESSIONAL LOCATION -->
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
