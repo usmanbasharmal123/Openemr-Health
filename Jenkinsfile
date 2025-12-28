@@ -34,7 +34,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                bat 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml'
+                sh 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml'
             }
             post {
                 always {
