@@ -1,0 +1,30 @@
+2025-12-28 10:38:51.718 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 10:50:24.632 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 10:55:06.889 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:05:41.812 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:08:06.330 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:12:02.290 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:19:37.166 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:19:37.199 [main] INFO  TestListener - TestNG onStart: OpenEMR Regression
+2025-12-28 12:19:46.988 [main] INFO  TestListener - TestNG onFinish: OpenEMR Regression
+2025-12-28 12:19:47.005 [main] INFO  TestListener - TestNG onStart: Report Test
+2025-12-28 12:19:50.183 [main] INFO  TestListener - TestNG onFinish: Report Test
+2025-12-28 12:19:50.199 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
+2025-12-28 12:21:48.719 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:21:48.751 [main] INFO  TestListener - TestNG onStart: OpenEMR Regression
+2025-12-28 12:21:58.544 [main] INFO  TestListener - TestNG onFinish: OpenEMR Regression
+2025-12-28 12:21:58.561 [main] INFO  TestListener - TestNG onStart: Report Test
+2025-12-28 12:38:16.245 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:38:16.282 [main] INFO  TestListener - TestNG onStart: OpenEMR Regression
+2025-12-28 12:38:26.158 [main] INFO  TestListener - TestNG onFinish: OpenEMR Regression
+2025-12-28 12:38:26.176 [main] INFO  TestListener - TestNG onStart: Report Test
+2025-12-28 12:40:03.764 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:40:05.590 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:40:21.872 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
+2025-12-28 12:40:23.149 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
+2025-12-28 12:43:47.847 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:43:57.731 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
+2025-12-28 12:47:22.359 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:47:22.447 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
+2025-12-28 12:52:28.678 [main] INFO  BaseTest - ===== Test Suite Execution Started =====
+2025-12-28 12:52:40.262 [main] INFO  BaseTest - ===== Test Suite Execution Completed =====
