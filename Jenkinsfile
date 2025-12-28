@@ -83,7 +83,6 @@ def generateTestChart(summary) {
     """
 }
 
-
 // -------------------------
 // Main Pipeline
 // -------------------------
@@ -158,48 +157,26 @@ pipeline {
 
         always {
             script {
-                def reportUrl = "${env.BUILD_URL}OpenEMR_Automation_Report/"
-                def status = currentBuild.currentResult
-                def summary = getTestSummary()
-                def chart   = generateTestChart(summary)
-                def screenshots = buildScreenshotGallery()
 
+                // SIMPLE PLAIN TEXT EMAIL TEST
                 emailext(
                     to: env.EMAIL_RECIPIENTS,
                     from: 'usman.basharmal123@gmail.com',
-                    subject: "OpenEMR Automation - Build #${env.BUILD_NUMBER} - ${status}",
+                    subject: "Jenkins Plain Text Test Email - Build #${env.BUILD_NUMBER}",
                     mimeType: 'text/plain',
-                    body: 'This is a plain test email.',
-<html>
-<body style="font-family: Arial, sans-serif;">
+                    body: """Hello Usman,
 
-<h2 style="color:#2E86C1;">OpenEMR Automation Test Report</h2>
+This is a plain text test email sent from your Jenkins pipeline.
 
-<h3>📊 Test Summary</h3>
-<table border="1" cellpadding="6" cellspacing="0">
-<tr><th>Passed</th><td>${summary.passed}</td></tr>
-<tr><th>Failed</th><td>${summary.failed}</td></tr>
-<tr><th>Skipped</th><td>${summary.skipped}</td></tr>
-</table>
+If you receive this, Gmail is accepting pipeline emails.
 
-<h3>📈 Test Result Chart</h3>
-${chart}
-
-<h3>📄 HTML Report</h3>
-<a href="${reportUrl}">OpenEMR Automation HTML Report</a>
-
-<h3>📸 Screenshots</h3>
-${screenshots}
-
-<p>Regards,<br/>Jenkins CI</p>
-
-</body>
-</html>
+Regards,
+Jenkins CI
 """
                 )
             }
 
-            echo "Pipeline completed. Email sent with summary, chart, and screenshots."
+            echo "Pipeline completed. Plain text email sent."
         }
     }
 }
