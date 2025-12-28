@@ -10,27 +10,36 @@
     <packaging>jar</packaging>
 
     <name>Openemr</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
 
-        <!-- UPDATED VERSIONS -->
+        <!-- JDK 21 -->
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+
+        <!-- Versions -->
         <selenium.version>4.25.0</selenium.version>
         <testng.version>7.10.2</testng.version>
         <log4j2.version>2.23.1</log4j2.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <commons-io.version>2.16.1</commons-io.version>
+        <extentreports.version>5.1.1</extentreports.version>
     </properties>
 
     <dependencies>
 
-        <!-- Selenium (UPDATED) -->
+        <!-- Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- FIX FOR CHROME 143 CDP -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v143</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
@@ -39,24 +48,21 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
-           <!-- <scope>test</scope>-->
         </dependency>
 
-        <!-- Log4j2 API -->
+        <!-- Log4j2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
 
-        <!-- Log4j2 Core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
 
-        <!-- Log4j2 SLF4J Bridge -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
@@ -76,12 +82,13 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
-        <dependency>
-    <groupId>com.aventstack</groupId>
-    <artifactId>extentreports</artifactId>
-    <version>5.1.1</version>
-</dependency>
 
+        <!-- ExtentReports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -106,7 +113,8 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                        <!-- PROFESSIONAL LOCATION -->
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
