@@ -1,14 +1,14 @@
 // -------------------------
-// Helper: Extract Test Summary
+// SAFE Helper: Extract Test Summary
 // -------------------------
 def getTestSummary() {
     def summary = [passed: 0, failed: 0, skipped: 0]
-    def reportsDir = new File("${pwd()}/target/surefire-reports")
 
-    if (!reportsDir.exists()) return summary
+    def xmlFiles = findFiles(glob: 'target/surefire-reports/*.xml')
+    if (!xmlFiles) return summary
 
-    reportsDir.eachFileMatch(~/.*\.xml/) { file ->
-        def xml = new XmlSlurper().parse(file)
+    xmlFiles.each { f ->
+        def xml = new XmlSlurper().parseText(readFile(f.path))
         summary.passed  += xml.@tests.toInteger() - xml.@failures.toInteger() - xml.@errors.toInteger() - xml.@skipped.toInteger()
         summary.failed  += xml.@failures.toInteger() + xml.@errors.toInteger()
         summary.skipped += xml.@skipped.toInteger()
@@ -18,18 +18,10 @@ def getTestSummary() {
 }
 
 // -------------------------
-// Helper: Screenshot Gallery
+// SAFE Helper: Screenshot Gallery
 // -------------------------
 def buildScreenshotGallery() {
-    def screenshotDir = "screenshots"
-    def workspace = pwd()
-    def files = []
-
-    try {
-        files = new File("${workspace}/${screenshotDir}").listFiles()
-    } catch (Exception e) {
-        return "<p>No screenshots found.</p>"
-    }
+    def files = findFiles(glob: 'screenshots/*.png')
 
     if (!files || files.size() == 0) {
         return "<p>No screenshots found.</p>"
@@ -37,17 +29,15 @@ def buildScreenshotGallery() {
 
     def html = "<table><tr>"
 
-    files.each { file ->
-        def fileName = file.getName()
-        def fileUrl = "${env.BUILD_URL}artifact/${screenshotDir}/${fileName}"
-
+    files.each { f ->
+        def fileUrl = "${env.BUILD_URL}artifact/${f.path}"
         html += """
             <td style='padding:10px; text-align:center;'>
                 <a href='${fileUrl}' target='_blank'>
                     <img src='${fileUrl}' width='200' style='border:1px solid #ccc;'/>
                 </a>
                 <br/>
-                <small>${fileName}</small>
+                <small>${f.name}</small>
             </td>
         """
     }
@@ -57,7 +47,7 @@ def buildScreenshotGallery() {
 }
 
 // -------------------------
-// Helper: Test Result Chart
+// SAFE Helper: Test Result Chart
 // -------------------------
 def generateTestChart(summary) {
     return """
