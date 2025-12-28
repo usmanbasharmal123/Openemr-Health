@@ -165,10 +165,11 @@ pipeline {
                 def screenshots = buildScreenshotGallery()
 
                 emailext(
-                    to: env.EMAIL_RECIPIENTS,from: 'usman.basharmal123@gmail.com',
+                    to: env.EMAIL_RECIPIENTS,
+                    from: 'usman.basharmal123@gmail.com',
                     subject: "OpenEMR Automation - Build #${env.BUILD_NUMBER} - ${status}",
                     mimeType: 'text/html',
-                    body: """
+                    body: 'This is a plain test email.',
 <html>
 <body style="font-family: Arial, sans-serif;">
 
