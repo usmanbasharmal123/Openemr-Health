@@ -21,25 +21,26 @@ public class InlineExtentReport {
 		try {
 			String html = Files.readString(Paths.get(reportPath), StandardCharsets.UTF_8);
 
-			// Extract CDN URLs from your HTML
-			String cssUrl = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da56cce2e9eef0d29512/spark/css/spark-style.css";
+			// Your exact CDN URLs from the snippet
+			String cssUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da5c6ce2e9eef0d29512/spark/css/spark-style.css";
+			String cssUrl2 = "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+
 			String jsUrl1 = "https://cdn.rawgit.com/extent-framework/extent-github-cdn/7cc78ce/spark/js/jsontree.js";
-			String jsUrl2 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ac7abbc71b4bb073da00153a5a3fdbcfe0c95e2a/spark/js/spark-script.js";
 
 			// Download CSS/JS
-			String css = download(cssUrl);
+			String css1 = download(cssUrl1);
+			String css2 = download(cssUrl2);
 			String js1 = download(jsUrl1);
-			String js2 = download(jsUrl2);
 
 			// Remove ALL external references
 			html = html.replaceAll("<link[^>]*>", "");
 			html = html.replaceAll("<script src=[^>]*></script>", "");
 
 			// Inject CSS
-			html = html.replace("</head>", "<style>" + css + "</style></head>");
+			html = html.replace("</head>", "<style>" + css1 + css2 + "</style></head>");
 
-			// Inject JS (both files)
-			html = html.replace("</body>", "<script>" + js1 + js2 + "</script></body>");
+			// Inject JS
+			html = html.replace("</body>", "<script>" + js1 + "</script></body>");
 
 			// Save updated HTML
 			Files.writeString(Paths.get(reportPath), html, StandardCharsets.UTF_8);

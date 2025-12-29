@@ -11,6 +11,7 @@ import com.aventstack.extentreports.Status;
 
 import reports.ExtentManager;
 import reports.ExtentTestManager;
+import reports.ReportUtil;
 import utils.ConfigReader;
 import utils.InlineExtentReport;
 import utils.ScreenshotUtil;
@@ -125,7 +126,9 @@ public class ExtentListener implements ITestListener {
 		}
 		// Paths to your Extent files
 
-		InlineExtentReport.inlineResources("reports/ExtentReport.html");
+		String latestReport = ReportUtil.getLatestReportPath("reports/");
+		InlineExtentReport.inlineResources(latestReport);
+
 	}
 
 }
