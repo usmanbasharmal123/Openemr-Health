@@ -21,35 +21,37 @@ public class InlineExtentReport {
 		try {
 			String html = Files.readString(Paths.get(reportPath), StandardCharsets.UTF_8);
 
-			// CDN URLs
+			// Correct CDN URLs
 			String cssUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da5c6ce2e9eef0d29512/spark/css/spark-style.css";
 			String cssUrl2 = "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
 
-			String jsUrl1 = "https://cdn.rawgit.com/extent-framework/extent-github-cdn/7cc78ce/spark/js/jsontree.js";
+			// FIXED jsontree.js URL
+			String jsUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/jsontree.js";
 
 			// Download CSS/JS
 			String css1 = download(cssUrl1);
 			String css2 = download(cssUrl2);
 			String js1 = download(jsUrl1);
 
-			// Remove ALL <link> tags (case-insensitive)
+			// Remove ALL <link> tags
 			html = html.replaceAll("(?i)<link[^>]*>", "");
 
-			// Remove ALL <script src="..."> tags (case-insensitive)
+			// Remove ALL <script src="..."> tags
 			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*></script>", "");
 			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*>", "");
 
 			// Inject CSS
 			html = html.replace("</head>", "<style>" + css1 + css2 + "</style></head>");
 
-			// Inject JS
-			html = html.replace("</body>", "<script>" + js1 + "</script></body>");
+			// Inject JS before last </body>
+			int idx = html.lastIndexOf("</body>");
+			if (idx != -1) {
+				html = html.substring(0, idx) + "<script>" + js1 + "</script>" + html.substring(idx);
+			}
 
-			// Save updated HTML
 			Files.writeString(Paths.get(reportPath), html, StandardCharsets.UTF_8);
 
-			System.out.println("✔ Report successfully inlined for Jenkins.");
-			System.out.println(">>> InlineExtentReport called with: " + reportPath);
+			System.out.println("✔ Report successfully inlined for Jenkins: " + reportPath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
