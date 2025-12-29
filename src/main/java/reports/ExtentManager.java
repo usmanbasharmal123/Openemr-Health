@@ -25,6 +25,9 @@ public class ExtentManager {
 
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 
+		// ⭐ CRITICAL FIX: Embed CSS/JS directly into the HTML
+		spark.config().setInlineResources(true);
+
 		// Theme + Branding
 		spark.config().setTheme(Theme.DARK);
 		spark.config().setDocumentTitle("OpenEMR Automation Report");
