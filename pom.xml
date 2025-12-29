@@ -77,11 +77,8 @@
         </dependency>
 
         <!-- ExtentReports -->
-        <dependency>
-            <groupId>com.aventstack</groupId>
-            <artifactId>extentreports</artifactId>
-            <version>${extentreports.version}</version>
-        </dependency>
+       <!-- ExtentReports Core --> <dependency> <groupId>com.aventstack</groupId> <artifactId>extentreports</artifactId> <version>5.1.1</version> </dependency> <!-- ExtentReports Spark Reporter --> 
+       <dependency> <groupId>com.aventstack</groupId> <artifactId>extentreports-spark</artifactId> <version>5.1.1</version> </dependency>
 
     </dependencies>
 

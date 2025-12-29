@@ -25,9 +25,6 @@ public class ExtentManager {
 
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 
-		// ⭐ CRITICAL FIX: Embed CSS/JS directly into the HTML
-		spark.config().setInlineResources(true);
-
 		// Theme + Branding
 		spark.config().setTheme(Theme.DARK);
 		spark.config().setDocumentTitle("OpenEMR Automation Report");
@@ -36,12 +33,12 @@ public class ExtentManager {
 				"<img src='https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg' height='40'/> "
 						+ " OpenEMR Test Execution Summary");
 
-		// Custom CSS for styling
-		spark.config().setCss(".badge-primary { background-color: #4CAF50 !important; }" + /* PASS */
-				".badge-danger { background-color: #F44336 !important; }" + /* FAIL */
-				".badge-warning { background-color: #FFC107 !important; }" + /* SKIP */
-				".nav-wrapper { background-color: #1E1E1E !important; }" + /* Left panel */
-				".brand-logo { font-size: 22px !important; font-weight: bold !important; }"
+		// Custom CSS
+		spark.config().setCss(".badge-primary { background-color: #4CAF50 !important; }"
+				+ ".badge-danger { background-color: #F44336 !important; }"
+				+ ".badge-warning { background-color: #FFC107 !important; }"
+				+ ".nav-wrapper { background-color: #1E1E1E !important; }"
+				+ ".brand-logo { font-size: 22px !important; font-weight: bold !important; }"
 				+ ".test-name { font-size: 18px !important; font-weight: 600 !important; }"
 				+ ".card-panel { border-radius: 10px !important; }" + ".step-details { font-size: 14px !important; }"
 				+ ".screenshot img { border: 2px solid #444 !important; border-radius: 6px !important; }"
@@ -50,7 +47,7 @@ public class ExtentManager {
 		extent = new ExtentReports();
 		extent.attachReporter(spark);
 
-		// Global system info
+		// System info
 		extent.setSystemInfo("Framework", "Selenium + TestNG");
 		extent.setSystemInfo("Author", "Basharmal Safi");
 		extent.setSystemInfo("Environment", "Local Machine");
