@@ -21,7 +21,7 @@ public class InlineExtentReport {
 		try {
 			String html = Files.readString(Paths.get(reportPath), StandardCharsets.UTF_8);
 
-			// Your exact CDN URLs from the snippet
+			// CDN URLs
 			String cssUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da5c6ce2e9eef0d29512/spark/css/spark-style.css";
 			String cssUrl2 = "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
 
@@ -32,9 +32,12 @@ public class InlineExtentReport {
 			String css2 = download(cssUrl2);
 			String js1 = download(jsUrl1);
 
-			// Remove ALL external references
-			html = html.replaceAll("<link[^>]*>", "");
-			html = html.replaceAll("<script src=[^>]*></script>", "");
+			// Remove ALL <link> tags (case-insensitive)
+			html = html.replaceAll("(?i)<link[^>]*>", "");
+
+			// Remove ALL <script src="..."> tags (case-insensitive)
+			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*></script>", "");
+			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*>", "");
 
 			// Inject CSS
 			html = html.replace("</head>", "<style>" + css1 + css2 + "</style></head>");
@@ -52,7 +55,5 @@ public class InlineExtentReport {
 			e.printStackTrace();
 			System.out.println("❌ Failed to inline report.");
 		}
-		System.out.println(">>> InlineExtentReport called with: " + reportPath);
-
 	}
 }
