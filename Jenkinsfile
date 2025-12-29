@@ -115,28 +115,7 @@ pipeline {
             }
         }
 
-        stage('Inline ExtentReport') {
-            steps {
-                script {
-                    // Detect latest ExtentReport BEFORE archiving
-                    bat '''
-                    for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
-                        echo %%a > extent_name.txt
-                        goto :done
-                    )
-                    :done
-                    '''
 
-                    def extentFile = readFile('extent_name.txt').trim()
-                    def fullPath = "reports/${extentFile}"
-
-                    println "Inlining CSS/JS for: ${fullPath}"
-
-                    // CALL INLINE METHOD HERE
-                    InlineExtentReport.inlineResources(fullPath)
-                }
-            }
-        }
 
         stage('Archive Reports') {
             steps {
