@@ -10,7 +10,6 @@ def getTestSummary() {
 
     def content = readFile("target/surefire-reports/testng-results.xml")
 
-    // Extract numbers using regex (sandbox-safe)
     def tests    = (content =~ /total="(\d+)"/)[0][1].toInteger()
     def failures = (content =~ /failed="(\d+)"/)[0][1].toInteger()
     def skipped  = (content =~ /skipped="(\d+)"/)[0][1].toInteger()
@@ -23,7 +22,7 @@ def getTestSummary() {
 }
 
 // -------------------------
-// SAFE Helper: Screenshot Gallery (Windows dir + readFile)
+// SAFE Helper: Screenshot Gallery
 // -------------------------
 def buildScreenshotGallery() {
     bat(script: 'dir /b screenshots\\*.png > screenshot_list.txt', returnStatus: true)
@@ -56,31 +55,6 @@ def buildScreenshotGallery() {
 
     html += "</tr></table>"
     return html
-}
-
-// -------------------------
-// SAFE Helper: Test Result Chart (not used in email now, but kept)
-// -------------------------
-def generateTestChart(summary) {
-    return """
-    <div style="width: 400px; margin-top:20px;">
-        <img src="https://quickchart.io/chart?c={
-            type:'bar',
-            data:{
-                labels:['Passed','Failed','Skipped'],
-                datasets:[{
-                    label:'Test Results',
-                    data:[${summary.passed},${summary.failed},${summary.skipped}],
-                    backgroundColor:['#2ECC71','#E74C3C','#F1C40F']
-                }]
-            },
-            options:{
-                plugins:{legend:{display:false}},
-                scales:{y:{beginAtZero:true}}
-            }
-        }" style="width:400px;"/>
-    </div>
-    """
 }
 
 // -------------------------
@@ -158,9 +132,6 @@ pipeline {
         always {
             script {
 
-                // -------------------------
-                // Build dynamic data
-                // -------------------------
                 def summary = getTestSummary()
                 def reportUrl = "${env.BUILD_URL}OpenEMR_Automation_Report/"
                 def buildDuration = currentBuild.durationString.replace('and counting', '')
@@ -173,19 +144,14 @@ pipeline {
                 if (summary.failed > 0) {
                     def xml = readFile("target/surefire-reports/testng-results.xml")
 
-                    // Groovy-safe DOTALL regex using (?s)
                     def failedTests = (xml =~ /(?s)<test-method status="FAIL" name="([^"]+)".*?<full-stacktrace>(.*?)<\/full-stacktrace>/)
 
                     failedTests.each { match ->
                         def testName = match[1]
                         def stack = match[2]
-                                .replaceAll("<!\
-
-\[CDATA\
-
-\[", "")
-                                .replaceAll("]]>", "")
-                                .replaceAll("\n", "<br/>")
+                            .replace("<![CDATA[", "")
+                            .replace("]]>", "")
+                            .replace("\n", "<br/>")
 
                         failureRows += """
                             <tr>
@@ -231,7 +197,7 @@ pipeline {
                 """
 
                 // -------------------------
-                // PIE CHART (QuickChart)
+                // PIE CHART
                 // -------------------------
                 def chartUrl = "https://quickchart.io/chart?c={type:'pie',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[${summary.passed},${summary.failed},${summary.skipped}],backgroundColor:['#2ECC71','#E74C3C','#F1C40F']}]} }"
 
