@@ -124,11 +124,8 @@ public class ExtentListener implements ITestListener {
 			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
 		}
 		// Paths to your Extent files
-		String reportPath = "reports/ExtentReport.html";
-		String cssPath = "reports/spark-style.css";
-		String jsPath = "reports/spark-script.js";
-		// Inline the CSS/JS so Jenkins can display it
-		InlineExtentReport.inlineResources(reportPath, cssPath, jsPath);
+
+		InlineExtentReport.inlineResources("reports/ExtentReport.html");
 	}
 
 }
