@@ -22,10 +22,12 @@ def getTestSummary() {
 }
 
 // -------------------------
-// SAFE Helper: Screenshot Gallery
+// SAFE Helper: Screenshot Gallery (UPDATED PATH)
 // -------------------------
 def buildScreenshotGallery() {
-    bat(script: 'dir /b screenshots\\*.png > screenshot_list.txt', returnStatus: true)
+
+    // FIXED: Correct screenshot folder path
+    bat(script: 'dir /b reports\\screenshots\\*.png > screenshot_list.txt', returnStatus: true)
 
     if (!fileExists('screenshot_list.txt')) {
         return "<p>No screenshots found.</p>"
@@ -40,7 +42,10 @@ def buildScreenshotGallery() {
 
     list.each { fileName ->
         if (fileName.trim()) {
-            def fileUrl = "${env.BUILD_URL}artifact/screenshots/${fileName}"
+
+            // FIXED: Correct URL path
+            def fileUrl = "${env.BUILD_URL}artifact/reports/screenshots/${fileName}"
+
             html += """
                 <td style='padding:10px; text-align:center;'>
                     <a href='${fileUrl}' target='_blank'>
@@ -98,8 +103,11 @@ pipeline {
             }
             post {
                 always {
+
+                    // FIXED: Correct screenshot folder
+                    archiveArtifacts artifacts: 'reports/screenshots/*.png', allowEmptyArchive: true
+
                     archiveArtifacts artifacts: 'reports/**', fingerprint: true
-                    archiveArtifacts artifacts: 'screenshots/**', allowEmptyArchive: true
                     archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
                 }
             }
@@ -137,9 +145,16 @@ post {
             def screenshotsHtml = buildScreenshotGallery()
 
             // -------------------------
-            // Detect LATEST ExtentReport file (Windows-safe)
+            // Detect LATEST ExtentReport file (UPDATED WINDOWS-SAFE)
             // -------------------------
-            bat(script: 'for /f "delims=" %a in (\'dir /b /o-d reports\\ExtentReport_*.html\') do @echo %a & goto :eof > extent_name.txt')
+            bat '''
+            for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
+                echo %%a > extent_name.txt
+                goto :done
+            )
+            :done
+            '''
+
             def extentFile = readFile('extent_name.txt').trim()
             def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
 
@@ -286,4 +301,3 @@ post {
     }
 }
 
-}
