@@ -17,7 +17,6 @@ public class InlineExtentReport {
 			HttpRequest request = HttpRequest.newBuilder(URI.create(url)).build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-			// Reject redirects, HTML error pages, or empty responses
 			String body = response.body();
 			if (body == null || body.isBlank()) {
 				System.out.println("❌ Empty response for: " + url);
@@ -40,21 +39,23 @@ public class InlineExtentReport {
 		try {
 			String html = Files.readString(Paths.get(reportPath), StandardCharsets.UTF_8);
 
-			// Correct CDN URLs
-			String cssUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@6fbbd1c32fbc2463d026da5c6ce2e9eef0d29512/spark/css/spark-style.css";
-			String cssUrl2 = "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+			// Spark CSS (dark theme compatible)
+			String cssSparkStyle = safeDownload(
+					"https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/css/spark-style.css");
+			String cssSparkFonts = safeDownload(
+					"https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/css/spark-fonts.css");
+			String cssSparkIcons = safeDownload(
+					"https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/css/spark-icons.css");
 
-			// Correct jsontree.js URL
-			String jsUrl1 = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/jsontree.js";
+			// Spark JS
+			String jsJsonTree = safeDownload(
+					"https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/jsontree.js");
+			String jsSparkScript = safeDownload(
+					"https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/spark-script.js");
 
-			// SAFE downloads
-			String css1 = safeDownload(cssUrl1);
-			String css2 = safeDownload(cssUrl2);
-			String js1 = safeDownload(jsUrl1);
-
-			// If downloads failed, DO NOT corrupt the report
-			if (css1.isEmpty() || js1.isEmpty()) {
-				System.out.println("❌ CSS/JS download failed — skipping inline to avoid corrupting report.");
+			// Validate downloads
+			if (cssSparkStyle.isEmpty() || jsJsonTree.isEmpty() || jsSparkScript.isEmpty()) {
+				System.out.println("❌ Missing Spark CSS/JS — skipping inline to avoid corrupting report.");
 				return;
 			}
 
@@ -65,19 +66,22 @@ public class InlineExtentReport {
 			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*></script>", "");
 			html = html.replaceAll("(?i)<script[^>]*src=[\"'][^\"']*[\"'][^>]*>", "");
 
-			// Inject CSS safely
-			html = html.replace("</head>", "<style>" + css1 + css2 + "</style></head>");
+			// Inject ALL Spark CSS
+			String allCss = "<style>" + cssSparkStyle + cssSparkFonts + cssSparkIcons + "</style>";
 
-			// Inject JS safely before last </body>
+			html = html.replace("</head>", allCss + "</head>");
+
+			// Inject ALL Spark JS
+			String allJs = "<script>" + jsJsonTree + jsSparkScript + "</script>";
+
 			int idx = html.lastIndexOf("</body>");
 			if (idx != -1) {
-				html = html.substring(0, idx) + "<script>" + js1 + "</script>" + html.substring(idx);
+				html = html.substring(0, idx) + allJs + html.substring(idx);
 			}
 
-			// Save updated HTML
 			Files.writeString(Paths.get(reportPath), html, StandardCharsets.UTF_8);
 
-			System.out.println("✔ SAFE inline completed for: " + reportPath);
+			System.out.println("✔ FULL Spark inline completed (Dark Theme): " + reportPath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
