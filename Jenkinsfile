@@ -133,9 +133,15 @@ pipeline {
             script {
 
                 def summary = getTestSummary()
-                def reportUrl = "${env.BUILD_URL}OpenEMR_Automation_Report/"
                 def buildDuration = currentBuild.durationString.replace('and counting', '')
                 def screenshotsHtml = buildScreenshotGallery()
+
+                // -------------------------
+                // Detect ExtentReport file dynamically (Windows-safe)
+                // -------------------------
+                bat(script: 'dir /b reports\\ExtentReport_*.html > extent_name.txt')
+                def extentFile = readFile('extent_name.txt').trim()
+                def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
 
                 // -------------------------
                 // Extract failed test names + stack traces
@@ -249,13 +255,13 @@ pipeline {
         ${failureRows}
     </table>
 
-    <h3>📄 HTML Report</h3>
+    <h3>📄 Full ExtentReport</h3>
     <p>
-      <a href="${reportUrl}"
-         style="background:#4aa3ff; color:white; padding:12px 20px; 
+      <a href="${extentReportUrl}"
+         style="background:#4aa3ff; color:white; padding:12px 20px;
                 border-radius:6px; text-decoration:none; font-weight:bold;
                 display:inline-block; margin-top:10px;">
-         View Full HTML Report
+         View Full ExtentReport
       </a>
     </p>
 
