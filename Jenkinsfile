@@ -158,12 +158,15 @@ pipeline {
         always {
             script {
 
-                // SIMPLE PLAIN TEXT EMAIL TEST
-             mail(
-    to: 'usman.basharmal123@gmail.com',
-    subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
-    mimeType: 'text/html',
-    body: """
+                // FIXED: Define summary + reportUrl BEFORE using them
+                def summary = getTestSummary()
+                def reportUrl = "${env.BUILD_URL}OpenEMR_Automation_Report/"
+
+                mail(
+                    to: 'usman.basharmal123@gmail.com',
+                    subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
+                    mimeType: 'text/html',
+                    body: """
 <html>
   <body style="font-family: Arial, sans-serif; color:#333;">
 
@@ -198,11 +201,10 @@ pipeline {
   </body>
 </html>
 """
-)
-
+                )
             }
 
-            echo "Pipeline completed. Plain text email sent."
+            echo "Pipeline completed. HTML email sent."
         }
     }
 }
