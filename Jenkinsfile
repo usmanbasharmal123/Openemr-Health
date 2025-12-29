@@ -1,7 +1,7 @@
 // -------------------------
 // SAFE Helper: Extract Test Summary (string parsing only)
 // -------------------------
-import utils.InlineExtentReport
+
 def getTestSummary() {
     def summary = [passed: 0, failed: 0, skipped: 0]
 
