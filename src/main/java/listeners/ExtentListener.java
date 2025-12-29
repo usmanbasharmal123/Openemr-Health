@@ -1,6 +1,5 @@
 package listeners;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.testng.ITestContext;
@@ -11,7 +10,9 @@ import com.aventstack.extentreports.Status;
 
 import reports.ExtentManager;
 import reports.ExtentTestManager;
+import reports.ReportUtil;
 import utils.ConfigReader;
+import utils.InlineExtentReport;
 import utils.ScreenshotUtil;
 
 public class ExtentListener implements ITestListener {
@@ -68,11 +69,9 @@ public class ExtentListener implements ITestListener {
 				(org.openqa.selenium.WebDriver) result.getTestContext().getAttribute("driver"),
 				result.getMethod().getMethodName());
 
-		// Add screenshot with correct relative path
 		try {
 			ExtentTestManager.getTest().addScreenCaptureFromPath(screenshotPath, "Screenshot");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -99,29 +98,13 @@ public class ExtentListener implements ITestListener {
 		// Flush report
 		ExtentManager.getInstance().flush();
 
-		// Auto-open the latest report
-		try {
-			File dir = new File("reports");
-
-			File[] files = dir.listFiles((d, name) -> name.endsWith(".html"));
-
-			if (files != null && files.length > 0) {
-
-				File latestReport = files[0];
-
-				for (File f : files) {
-					if (f.lastModified() > latestReport.lastModified()) {
-						latestReport = f;
-					}
-				}
-
-				// Open in default browser
-				java.awt.Desktop.getDesktop().browse(latestReport.toURI());
-			}
-
-		} catch (Exception e) {
-			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
+		// Inline CSS/JS for Jenkins + Email
+		String latestReport = ReportUtil.getLatestReportPath("reports/");
+		if (latestReport != null) {
+			InlineExtentReport.inlineResources(latestReport);
+			System.out.println("✔ Inlined ExtentReport: " + latestReport);
+		} else {
+			System.out.println("❌ No ExtentReport found to inline.");
 		}
 	}
-
 }

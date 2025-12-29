@@ -1,5 +1,6 @@
 package reports;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 public class ExtentManager {
 
 	private static ExtentReports extent;
+	private static String reportPath;
 
 	public static ExtentReports getInstance() {
 		if (extent == null) {
@@ -18,10 +20,21 @@ public class ExtentManager {
 		return extent;
 	}
 
+	public static String getReportPath() {
+		return reportPath;
+	}
+
 	private static ExtentReports createInstance() {
 
+		// Ensure reports folder exists
+		File reportsDir = new File("reports");
+		if (!reportsDir.exists()) {
+			reportsDir.mkdirs();
+		}
+
+		// Timestamped report name
 		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String reportPath = "reports/ExtentReport_" + timestamp + ".html";
+		reportPath = "reports/ExtentReport_" + timestamp + ".html";
 
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 
