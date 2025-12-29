@@ -159,7 +159,7 @@ pipeline {
             script {
 
                 // SIMPLE PLAIN TEXT EMAIL TEST
-                emailext(
+                mail(
                     to: env.EMAIL_RECIPIENTS,
                     from: 'usman.basharmal123@gmail.com',
                     subject: "Jenkins Plain Text Test Email - Build #${env.BUILD_NUMBER}",
