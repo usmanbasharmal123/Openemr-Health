@@ -26,7 +26,6 @@ def getTestSummary() {
 // -------------------------
 def buildScreenshotGallery() {
 
-    // FIXED: Correct screenshot folder path
     bat(script: 'dir /b reports\\screenshots\\*.png > screenshot_list.txt', returnStatus: true)
 
     if (!fileExists('screenshot_list.txt')) {
@@ -42,8 +41,6 @@ def buildScreenshotGallery() {
 
     list.each { fileName ->
         if (fileName.trim()) {
-
-            // FIXED: Correct URL path
             def fileUrl = "${env.BUILD_URL}artifact/reports/screenshots/${fileName}"
 
             html += """
@@ -103,10 +100,7 @@ pipeline {
             }
             post {
                 always {
-
-                    // FIXED: Correct screenshot folder
                     archiveArtifacts artifacts: 'reports/screenshots/*.png', allowEmptyArchive: true
-
                     archiveArtifacts artifacts: 'reports/**', fingerprint: true
                     archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
                 }
@@ -129,107 +123,94 @@ pipeline {
         }
     }
 
-post {
+    post {
 
-    unsuccessful {
-        script {
-            currentBuild.result = 'UNSTABLE'
+        unsuccessful {
+            script {
+                currentBuild.result = 'UNSTABLE'
+            }
         }
-    }
 
-    always {
-        script {
+        always {
+            script {
 
-            def summary = getTestSummary()
-            def buildDuration = currentBuild.durationString.replace('and counting', '')
-            def screenshotsHtml = buildScreenshotGallery()
+                def summary = getTestSummary()
+                def buildDuration = currentBuild.durationString.replace('and counting', '')
+                def screenshotsHtml = buildScreenshotGallery()
 
-            // -------------------------
-            // Detect LATEST ExtentReport file (UPDATED WINDOWS-SAFE)
-            // -------------------------
-            bat '''
-            for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
-                echo %%a > extent_name.txt
-                goto :done
-            )
-            :done
-            '''
+                // Detect latest ExtentReport
+                bat '''
+                for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
+                    echo %%a > extent_name.txt
+                    goto :done
+                )
+                :done
+                '''
 
-            def extentFile = readFile('extent_name.txt').trim()
-            def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
+                def extentFile = readFile('extent_name.txt').trim()
+                def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
 
-            // -------------------------
-            // Extract failed test names + stack traces
-            // -------------------------
-            def failureRows = ""
-            if (summary.failed > 0) {
-                def xml = readFile("target/surefire-reports/testng-results.xml")
+                // Extract failed tests
+                def failureRows = ""
+                if (summary.failed > 0) {
+                    def xml = readFile("target/surefire-reports/testng-results.xml")
+                    def failedTests = (xml =~ /(?s)<test-method status="FAIL" name="([^"]+)".*?<full-stacktrace>(.*?)<\/full-stacktrace>/)
 
-                def failedTests = (xml =~ /(?s)<test-method status="FAIL" name="([^"]+)".*?<full-stacktrace>(.*?)<\/full-stacktrace>/)
+                    failedTests.each { match ->
+                        def testName = match[1]
+                        def stack = match[2]
+                            .replace("<![CDATA[", "")
+                            .replace("]]>", "")
+                            .replace("\n", "<br/>")
 
-                failedTests.each { match ->
-                    def testName = match[1]
-                    def stack = match[2]
-                        .replace("<![CDATA[", "")
-                        .replace("]]>", "")
-                        .replace("\n", "<br/>")
-
-                    failureRows += """
+                        failureRows += """
+                            <tr>
+                                <td style='padding:8px; border:1px solid #444;'>${testName}</td>
+                                <td style='padding:8px; border:1px solid #444; font-family: monospace; color:#ff6b6b;'>${stack}</td>
+                            </tr>
+                        """
+                    }
+                } else {
+                    failureRows = """
                         <tr>
-                            <td style='padding:8px; border:1px solid #444;'>${testName}</td>
-                            <td style='padding:8px; border:1px solid #444; font-family: monospace; color:#ff6b6b;'>${stack}</td>
+                            <td colspan='2' style='padding:8px; border:1px solid #444;'>No failed tests</td>
                         </tr>
                     """
                 }
-            } else {
-                failureRows = """
-                    <tr>
-                        <td colspan='2' style='padding:8px; border:1px solid #444;'>No failed tests</td>
-                    </tr>
-                """
-            }
 
-            // -------------------------
-            // Collapsible failure list
-            // -------------------------
-            def failureList = ""
-            if (summary.failed > 0) {
-                def xml = readFile("target/surefire-reports/testng-results.xml")
-                def failedTests = (xml =~ /<test-method status="FAIL" name="([^"]+)"/)
-                failedTests.each { match ->
-                    failureList += "<li>${match[1]}</li>"
+                // Collapsible failure list
+                def failureList = ""
+                if (summary.failed > 0) {
+                    def xml = readFile("target/surefire-reports/testng-results.xml")
+                    def failedTests = (xml =~ /<test-method status="FAIL" name="([^"]+)"/)
+                    failedTests.each { match ->
+                        failureList += "<li>${match[1]}</li>"
+                    }
+                } else {
+                    failureList = "<li>No failed tests</li>"
                 }
-            } else {
-                failureList = "<li>No failed tests</li>"
-            }
 
-            // -------------------------
-            // Color-coded badge
-            // -------------------------
-            def status = currentBuild.currentResult
-            def badgeColor = (status == "SUCCESS") ? "#2ECC71" :
-                             (status == "UNSTABLE") ? "#F1C40F" : "#E74C3C"
+                // Badge
+                def status = currentBuild.currentResult
+                def badgeColor = (status == "SUCCESS") ? "#2ECC71" :
+                                 (status == "UNSTABLE") ? "#F1C40F" : "#E74C3C"
 
-            def badgeHtml = """
-                <span style="background:${badgeColor}; color:white; padding:6px 12px; 
-                             border-radius:6px; font-weight:bold;">
-                    ${status}
-                </span>
-            """
+                def badgeHtml = """
+                    <span style="background:${badgeColor}; color:white; padding:6px 12px; 
+                                 border-radius:6px; font-weight:bold;">
+                        ${status}
+                    </span>
+                """
 
-            // -------------------------
-            // PIE CHART
-            // -------------------------
-            def chartUrl = "https://quickchart.io/chart?c={type:'pie',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[${summary.passed},${summary.failed},${summary.skipped}],backgroundColor:['#2ECC71','#E74C3C','#F1C40F']}]} }"
+                // Pie chart
+                def chartUrl = "https://quickchart.io/chart?c={type:'pie',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[${summary.passed},${summary.failed},${summary.skipped}],backgroundColor:['#2ECC71','#E74C3C','#F1C40F']}]} }"
 
-            // -------------------------
-            // SEND EMAIL
-            // -------------------------
-            mail(
-                to: 'usman.basharmal123@gmail.com',
-                subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
-                mimeType: 'text/html',
-                body: """
+                // Send email
+                mail(
+                    to: 'usman.basharmal123@gmail.com',
+                    subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
+                    mimeType: 'text/html',
+                    body: """
 <html>
   <body style="font-family: Arial, sans-serif; color:#ddd; background:#1e1e1e; padding:20px;">
 
@@ -294,10 +275,10 @@ post {
   </body>
 </html>
 """
-            )
-        }
+                )
+            }
 
-        echo "Pipeline completed. Enterprise HTML email sent."
+            echo "Pipeline completed. Enterprise HTML email sent."
+        }
     }
 }
-
