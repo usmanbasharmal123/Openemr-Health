@@ -12,6 +12,7 @@ import reports.ExtentManager;
 import reports.ExtentTestManager;
 import reports.ReportUtil;
 import utils.ConfigReader;
+import utils.DebugExtentReport;
 import utils.InlineExtentReport;
 import utils.ScreenshotUtil;
 
@@ -126,7 +127,10 @@ public class ExtentListener implements ITestListener {
 		// Paths to your Extent files
 
 		String latestReport = ReportUtil.getLatestReportPath("reports/");
+		// Inline CSS/JS
 		InlineExtentReport.inlineResources(latestReport);
+		// DEBUG: Print EXACT HTML Jenkins will archive
+		DebugExtentReport.printHtml(latestReport);
 		System.out.println(">>> ExtentListener onFinish() reached");
 
 	}
