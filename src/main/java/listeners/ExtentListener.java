@@ -1,6 +1,5 @@
 package listeners;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.testng.ITestContext;
@@ -102,28 +101,28 @@ public class ExtentListener implements ITestListener {
 		ExtentManager.getInstance().flush();
 
 		// Auto-open the latest report
-		try {
-			File dir = new File("reports");
-
-			File[] files = dir.listFiles((d, name) -> name.endsWith(".html"));
-
-			if (files != null && files.length > 0) {
-
-				File latestReport = files[0];
-
-				for (File f : files) {
-					if (f.lastModified() > latestReport.lastModified()) {
-						latestReport = f;
-					}
-				}
-
-				// Open in default browser
-				java.awt.Desktop.getDesktop().browse(latestReport.toURI());
-			}
-
-		} catch (Exception e) {
-			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
-		}
+//		try {
+//			File dir = new File("reports");
+//
+//			File[] files = dir.listFiles((d, name) -> name.endsWith(".html"));
+//
+//			if (files != null && files.length > 0) {
+//
+//				File latestReport = files[0];
+//
+//				for (File f : files) {
+//					if (f.lastModified() > latestReport.lastModified()) {
+//						latestReport = f;
+//					}
+//				}
+//
+//				// Open in default browser
+//				java.awt.Desktop.getDesktop().browse(latestReport.toURI());
+//			}
+//
+//		} catch (Exception e) {
+//			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
+//		}
 		// Paths to your Extent files
 
 		String latestReport = ReportUtil.getLatestReportPath("reports/");
