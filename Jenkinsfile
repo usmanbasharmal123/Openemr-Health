@@ -1,96 +1,219 @@
-// REMOVE HTML PUBLISHER COMPLETELY
-// ExtentReport will be accessed directly as an artifact
+// -------------------------
+// SAFE Helper: Extract Test Summary (string parsing only)
+// -------------------------
+def getTestSummary() {
+    def summary = [passed: 0, failed: 0, skipped: 0]
 
-post {
+    if (!fileExists("target/surefire-reports/testng-results.xml")) {
+        return summary
+    }
 
-    unsuccessful {
-        script {
-            currentBuild.result = 'UNSTABLE'
+    def content = readFile("target/surefire-reports/testng-results.xml")
+
+    def tests    = (content =~ /total="(\d+)"/)[0][1].toInteger()
+    def failures = (content =~ /failed="(\d+)"/)[0][1].toInteger()
+    def skipped  = (content =~ /skipped="(\d+)"/)[0][1].toInteger()
+
+    summary.failed  = failures
+    summary.skipped = skipped
+    summary.passed  = tests - failures - skipped
+
+    return summary
+}
+
+// -------------------------
+// SAFE Helper: Screenshot Gallery (UPDATED PATH)
+// -------------------------
+def buildScreenshotGallery() {
+
+    bat(script: 'dir /b reports\\screenshots\\*.png > screenshot_list.txt', returnStatus: true)
+
+    if (!fileExists('screenshot_list.txt')) {
+        return "<p>No screenshots found.</p>"
+    }
+
+    def list = readFile('screenshot_list.txt').split("\r?\n")
+    if (!list || list.size() == 0) {
+        return "<p>No screenshots found.</p>"
+    }
+
+    def html = "<table><tr>"
+
+    list.each { fileName ->
+        if (fileName.trim()) {
+            def fileUrl = "${env.BUILD_URL}artifact/reports/screenshots/${fileName}"
+
+            html += """
+                <td style='padding:10px; text-align:center;'>
+                    <a href='${fileUrl}' target='_blank'>
+                        <img src='${fileUrl}' width='200' style='border:1px solid #ccc;'/>
+                    </a>
+                    <br/>
+                    <small>${fileName}</small>
+                </td>
+            """
         }
     }
 
-    always {
-        script {
+    html += "</tr></table>"
+    return html
+}
 
-            def summary = getTestSummary()
-            def buildDuration = currentBuild.durationString.replace('and counting', '')
-            def screenshotsHtml = buildScreenshotGallery()
+// -------------------------
+// Main Pipeline
+// -------------------------
+pipeline {
+    agent any
 
-            // Detect latest ExtentReport
-            bat '''
-            for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
-                echo %%a > extent_name.txt
-                goto :done
-            )
-            :done
-            '''
+    options {
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
 
-            def extentFile = readFile('extent_name.txt').trim()
+    environment {
+        MAVEN_TOOL = 'Maven-3'
+        JDK_TOOL   = 'JDK-21'
+        EMAIL_RECIPIENTS = 'usman.basharmal123@gmail.com'
+    }
 
-            // IMPORTANT: Raw artifact URL (NOT HTML Publisher)
-            def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
+    stages {
 
-            // Extract failed tests
-            def failureRows = ""
-            if (summary.failed > 0) {
-                def xml = readFile("target/surefire-reports/testng-results.xml")
-                def failedTests = (xml =~ /(?s)<test-method status="FAIL" name="([^"]+)".*?<full-stacktrace>(.*?)<\/full-stacktrace>/)
+        stage('Checkout') {
+            steps {
+                deleteDir()
 
-                failedTests.each { match ->
-                    def testName = match[1]
-                    def stack = match[2]
-                        .replace("<![CDATA[", "")
-                        .replace("]]>", "")
-                        .replace("\n", "<br/>")
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/usmanbasharmal123/Openemr-Health.git',
+                        credentialsId: 'github-credentials'
+                    ]],
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout'],
+                        [$class: 'PruneStaleBranch'],
+                        [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
+                    ]
+                ])
+            }
+        }
 
-                    failureRows += """
+        stage('Set up tools') {
+            steps {
+                script {
+                    def jdkHome   = tool name: env.JDK_TOOL, type: 'hudson.model.JDK'
+                    def mavenHome = tool name: env.MAVEN_TOOL, type: 'hudson.tasks.Maven$MavenInstallation'
+                    env.PATH = "${jdkHome}/bin:${mavenHome}/bin:${env.PATH}"
+                }
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                bat 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dmaven.test.failure.ignore=true'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reports/screenshots/*.png', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'reports/**', fingerprint: true
+                    archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
+                }
+            }
+        }
+
+        // IMPORTANT: HTML Publisher REMOVED
+    }
+
+    post {
+
+        unsuccessful {
+            script {
+                currentBuild.result = 'UNSTABLE'
+            }
+        }
+
+        always {
+            script {
+
+                def summary = getTestSummary()
+                def buildDuration = currentBuild.durationString.replace('and counting', '')
+                def screenshotsHtml = buildScreenshotGallery()
+
+                // Detect latest ExtentReport
+                bat '''
+                for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
+                    echo %%a > extent_name.txt
+                    goto :done
+                )
+                :done
+                '''
+
+                def extentFile = readFile('extent_name.txt').trim()
+
+                // RAW ARTIFACT URL (works perfectly)
+                def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
+
+                // Extract failed tests
+                def failureRows = ""
+                if (summary.failed > 0) {
+                    def xml = readFile("target/surefire-reports/testng-results.xml")
+                    def failedTests = (xml =~ /(?s)<test-method status="FAIL" name="([^"]+)".*?<full-stacktrace>(.*?)<\/full-stacktrace>/)
+
+                    failedTests.each { match ->
+                        def testName = match[1]
+                        def stack = match[2]
+                            .replace("<![CDATA[", "")
+                            .replace("]]>", "")
+                            .replace("\n", "<br/>")
+
+                        failureRows += """
+                            <tr>
+                                <td style='padding:8px; border:1px solid #444;'>${testName}</td>
+                                <td style='padding:8px; border:1px solid #444; font-family: monospace; color:#ff6b6b;'>${stack}</td>
+                            </tr>
+                        """
+                    }
+                } else {
+                    failureRows = """
                         <tr>
-                            <td style='padding:8px; border:1px solid #444;'>${testName}</td>
-                            <td style='padding:8px; border:1px solid #444; font-family: monospace; color:#ff6b6b;'>${stack}</td>
+                            <td colspan='2' style='padding:8px; border:1px solid #444;'>No failed tests</td>
                         </tr>
                     """
                 }
-            } else {
-                failureRows = """
-                    <tr>
-                        <td colspan='2' style='padding:8px; border:1px solid #444;'>No failed tests</td>
-                    </tr>
-                """
-            }
 
-            // Collapsible failure list
-            def failureList = ""
-            if (summary.failed > 0) {
-                def xml = readFile("target/surefire-reports/testng-results.xml")
-                def failedTests = (xml =~ /<test-method status="FAIL" name="([^"]+)"/)
-                failedTests.each { match ->
-                    failureList += "<li>${match[1]}</li>"
+                // Collapsible failure list
+                def failureList = ""
+                if (summary.failed > 0) {
+                    def xml = readFile("target/surefire-reports/testng-results.xml")
+                    def failedTests = (xml =~ /<test-method status="FAIL" name="([^"]+)"/)
+                    failedTests.each { match ->
+                        failureList += "<li>${match[1]}</li>"
+                    }
+                } else {
+                    failureList = "<li>No failed tests</li>"
                 }
-            } else {
-                failureList = "<li>No failed tests</li>"
-            }
 
-            // Badge
-            def status = currentBuild.currentResult
-            def badgeColor = (status == "SUCCESS") ? "#2ECC71" :
-                             (status == "UNSTABLE") ? "#F1C40F" : "#E74C3C"
+                // Badge
+                def status = currentBuild.currentResult
+                def badgeColor = (status == "SUCCESS") ? "#2ECC71" :
+                                 (status == "UNSTABLE") ? "#F1C40F" : "#E74C3C"
 
-            def badgeHtml = """
-                <span style="background:${badgeColor}; color:white; padding:6px 12px; 
-                             border-radius:6px; font-weight:bold;">
-                    ${status}
-                </span>
-            """
+                def badgeHtml = """
+                    <span style="background:${badgeColor}; color:white; padding:6px 12px; 
+                                 border-radius:6px; font-weight:bold;">
+                        ${status}
+                    </span>
+                """
 
-            // Pie chart
-            def chartUrl = "https://quickchart.io/chart?c={type:'pie',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[${summary.passed},${summary.failed},${summary.skipped}],backgroundColor:['#2ECC71','#E74C3C','#F1C40F']}]} }"
+                // Pie chart
+                def chartUrl = "https://quickchart.io/chart?c={type:'pie',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[${summary.passed},${summary.failed},${summary.skipped}],backgroundColor:['#2ECC71','#E74C3C','#F1C40F']}]} }"
 
-            // Send email
-            mail(
-                to: 'usman.basharmal123@gmail.com',
-                subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
-                mimeType: 'text/html',
-                body: """
+                // Send email
+                mail(
+                    to: 'usman.basharmal123@gmail.com',
+                    subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
+                    mimeType: 'text/html',
+                    body: """
 <html>
   <body style="font-family: Arial, sans-serif; color:#ddd; background:#1e1e1e; padding:20px;">
 
@@ -155,10 +278,12 @@ post {
   </body>
 </html>
 """
-            )
+                )
 
+            }
+
+            echo "Pipeline completed. Enterprise HTML email sent."
         }
-
-        echo "Pipeline completed. Enterprise HTML email sent."
     }
 }
+
