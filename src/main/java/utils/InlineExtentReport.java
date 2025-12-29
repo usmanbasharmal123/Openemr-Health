@@ -1,39 +1,21 @@
 package utils;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class InlineExtentReport {
 
-	private static final HttpClient client = HttpClient.newHttpClient();
-
-	private static String safeDownload(String url) {
-		try {
-			HttpRequest request = HttpRequest.newBuilder(URI.create(url)).build();
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-			String body = response.body();
-			if (body == null || body.isBlank()) {
-				System.out.println("❌ Empty response for: " + url);
+	private static String loadResource(String path) {
+		try (InputStream is = InlineExtentReport.class.getClassLoader().getResourceAsStream(path)) {
+			if (is == null) {
+				System.out.println("❌ Resource not found in classpath: " + path);
 				return "";
 			}
-
-			// If CDN returns HTML or an error message, don't inject it
-			if (body.contains("Couldn't find the requested file") || body.contains("<html")
-					|| body.contains("<!DOCTYPE")) {
-				System.out.println("❌ Invalid response for: " + url);
-				return "";
-			}
-
-			return body;
-
+			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
 		} catch (Exception e) {
-			System.out.println("❌ Failed to download: " + url + " -> " + e.getMessage());
+			System.out.println("❌ Failed to load resource: " + path + " -> " + e.getMessage());
 			return "";
 		}
 	}
@@ -42,25 +24,22 @@ public class InlineExtentReport {
 		try {
 			String html = Files.readString(Paths.get(reportPath), StandardCharsets.UTF_8);
 
-			// ExtentReports 4.1.7 Spark v4 CDN paths
-			String base = "https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@v4.1.7/spark/v4";
+			// Spark CSS (from ExtentReports JAR)
+			String cssSparkStyle = loadResource("com/aventstack/extentreports/view/spark/css/spark-style.css");
+			String cssSparkFonts = loadResource("com/aventstack/extentreports/view/spark/css/spark-fonts.css");
+			String cssSparkIcons = loadResource("com/aventstack/extentreports/view/spark/css/spark-icons.css");
 
-			// Spark CSS (dark theme compatible)
-			String cssSparkStyle = safeDownload(base + "/css/spark-style.css");
-			String cssSparkFonts = safeDownload(base + "/css/spark-fonts.css");
-			String cssSparkIcons = safeDownload(base + "/css/spark-icons.css");
+			// Spark JS (from ExtentReports JAR)
+			String jsJsonTree = loadResource("com/aventstack/extentreports/view/spark/js/jsontree.js");
+			String jsSparkScript = loadResource("com/aventstack/extentreports/view/spark/js/spark-script.js");
 
-			// Spark JS
-			String jsJsonTree = safeDownload(base + "/js/jsontree.js");
-			String jsSparkScript = safeDownload(base + "/js/spark-script.js");
-
-			// If any core pieces are missing, don't corrupt the report
+			// Validate core files
 			if (cssSparkStyle.isEmpty() || jsJsonTree.isEmpty() || jsSparkScript.isEmpty()) {
-				System.out.println("❌ Missing core Spark CSS/JS — skipping inline to avoid corrupting report.");
+				System.out.println("❌ Missing Spark CSS/JS — inline aborted.");
 				return;
 			}
 
-			// Remove ALL external <link> tags
+			// Remove ALL <link> tags
 			html = html.replaceAll("(?i)<link[^>]*>", "");
 
 			// Remove ALL <script src="..."> tags
@@ -72,7 +51,7 @@ public class InlineExtentReport {
 
 			html = html.replace("</head>", allCss + "</head>");
 
-			// Inject ALL Spark JS inline (at bottom of body)
+			// Inject ALL Spark JS inline
 			String allJs = "<script>" + jsJsonTree + jsSparkScript + "</script>";
 
 			int idx = html.lastIndexOf("</body>");
@@ -82,7 +61,7 @@ public class InlineExtentReport {
 
 			Files.writeString(Paths.get(reportPath), html, StandardCharsets.UTF_8);
 
-			System.out.println("✔ FULL Spark inline completed for Extent 4.1.7 (Dark Theme): " + reportPath);
+			System.out.println("✔ FULL Spark inline completed using CLASSPATH: " + reportPath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
