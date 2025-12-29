@@ -78,11 +78,26 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+     stage('Checkout') {
+    steps {
+        deleteDir()  // Wipes workspace completely
+
+        checkout([
+            $class: 'GitSCM',
+            branches: [[name: '*/main']],
+            userRemoteConfigs: [[
+                url: 'https://github.com/usmanbasharmal123/Openemr-Health.git',
+                credentialsId: 'github-credentials'   // <-- replace with your ID
+            ]],
+            extensions: [
+                [$class: 'CleanBeforeCheckout'],
+                [$class: 'PruneStaleBranch'],
+                [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
+            ]
+        ])
+    }
+}
+
 
         stage('Set up tools') {
             steps {
