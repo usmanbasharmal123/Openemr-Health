@@ -1,6 +1,7 @@
 package listeners;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -68,7 +69,12 @@ public class ExtentListener implements ITestListener {
 				result.getMethod().getMethodName());
 
 		// Add screenshot with correct relative path
-		ExtentTestManager.getTest().addScreenCaptureFromPath(screenshotPath, "Screenshot");
+		try {
+			ExtentTestManager.getTest().addScreenCaptureFromPath(screenshotPath, "Screenshot");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

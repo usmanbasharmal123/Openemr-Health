@@ -34,7 +34,7 @@ public class ExtentManager {
 						+ " OpenEMR Test Execution Summary");
 
 		// Custom CSS
-		spark.config().setCss(".badge-primary { background-color: #4CAF50 !important; }"
+		spark.config().setCSS(".badge-primary { background-color: #4CAF50 !important; }"
 				+ ".badge-danger { background-color: #F44336 !important; }"
 				+ ".badge-warning { background-color: #FFC107 !important; }"
 				+ ".nav-wrapper { background-color: #1E1E1E !important; }"

@@ -7,7 +7,6 @@ import com.aventstack.extentreports.ExtentTest;
 
 public class ExtentTestManager {
 
-	// Thread-safe for parallel execution
 	private static Map<Long, ExtentTest> testMap = new ConcurrentHashMap<>();
 
 	public static synchronized ExtentTest getTest() {
@@ -19,7 +18,6 @@ public class ExtentTestManager {
 		testMap.put(Thread.currentThread().getId(), test);
 	}
 
-	// Step-level logging
 	public static void logStep(String message) {
 		getTest().info(message);
 	}

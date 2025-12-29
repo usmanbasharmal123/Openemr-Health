@@ -14,22 +14,19 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- JDK 21 -->
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <!-- Versions -->
         <selenium.version>4.25.0</selenium.version>
         <testng.version>7.10.2</testng.version>
         <log4j2.version>2.23.1</log4j2.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <commons-io.version>2.16.1</commons-io.version>
-        <extentreports.version>5.1.1</extentreports.version>
     </properties>
 
     <dependencies>
 
-        <!-- Selenium (includes DevTools internally) -->
+        <!-- Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -76,16 +73,18 @@
             <version>${commons-io.version}</version>
         </dependency>
 
-        <!-- ExtentReports -->
-       <!-- ExtentReports Core --> <dependency> <groupId>com.aventstack</groupId> <artifactId>extentreports</artifactId> <version>5.1.1</version> </dependency> <!-- ExtentReports Spark Reporter --> 
-       <dependency> <groupId>com.aventstack</groupId> <artifactId>extentreports-spark</artifactId> <version>5.1.1</version> </dependency>
+        <!-- ⭐ ExtentReports 4.x (Maven Central, no JitPack needed) -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>4.1.7</version>
+        </dependency>
 
     </dependencies>
 
     <build>
         <plugins>
 
-            <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -96,7 +95,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
