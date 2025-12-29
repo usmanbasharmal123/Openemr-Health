@@ -25,13 +25,13 @@ public class ExtentManager {
 
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 
+		// Theme + Branding
 		spark.config().setTheme(Theme.DARK);
 		spark.config().setDocumentTitle("OpenEMR Automation Report");
+
 		spark.config().setReportName(
 				"<img src='https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg' height='40'/> "
 						+ " OpenEMR Test Execution Summary");
-
-		// DO NOT USE setOfflineMode() — not available in ExtentReports 4.x
 
 		// Custom CSS
 		spark.config().setCSS(".badge-primary { background-color: #4CAF50 !important; }"
@@ -47,6 +47,7 @@ public class ExtentManager {
 		extent = new ExtentReports();
 		extent.attachReporter(spark);
 
+		// System info
 		extent.setSystemInfo("Framework", "Selenium + TestNG");
 		extent.setSystemInfo("Author", "Basharmal Safi");
 		extent.setSystemInfo("Environment", "Local Machine");

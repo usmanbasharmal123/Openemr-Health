@@ -1,5 +1,6 @@
 package listeners;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.testng.ITestContext;
@@ -10,10 +11,7 @@ import com.aventstack.extentreports.Status;
 
 import reports.ExtentManager;
 import reports.ExtentTestManager;
-import reports.ReportUtil;
 import utils.ConfigReader;
-import utils.DebugExtentReport;
-import utils.InlineExtentReport;
 import utils.ScreenshotUtil;
 
 public class ExtentListener implements ITestListener {
@@ -102,37 +100,28 @@ public class ExtentListener implements ITestListener {
 		ExtentManager.getInstance().flush();
 
 		// Auto-open the latest report
-//		try {
-//			File dir = new File("reports");
-//
-//			File[] files = dir.listFiles((d, name) -> name.endsWith(".html"));
-//
-//			if (files != null && files.length > 0) {
-//
-//				File latestReport = files[0];
-//
-//				for (File f : files) {
-//					if (f.lastModified() > latestReport.lastModified()) {
-//						latestReport = f;
-//					}
-//				}
-//
-//				// Open in default browser
-//				java.awt.Desktop.getDesktop().browse(latestReport.toURI());
-//			}
-//
-//		} catch (Exception e) {
-//			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
-//		}
-		// Paths to your Extent files
+		try {
+			File dir = new File("reports");
 
-		String latestReport = ReportUtil.getLatestReportPath("reports/");
-		// Inline CSS/JS
-		InlineExtentReport.inlineResources(latestReport);
-		// DEBUG: Print EXACT HTML Jenkins will archive
-		DebugExtentReport.printHtml(latestReport);
-		System.out.println(">>> ExtentListener onFinish() reached");
+			File[] files = dir.listFiles((d, name) -> name.endsWith(".html"));
 
+			if (files != null && files.length > 0) {
+
+				File latestReport = files[0];
+
+				for (File f : files) {
+					if (f.lastModified() > latestReport.lastModified()) {
+						latestReport = f;
+					}
+				}
+
+				// Open in default browser
+				java.awt.Desktop.getDesktop().browse(latestReport.toURI());
+			}
+
+		} catch (Exception e) {
+			System.out.println("Failed to auto-open ExtentReport: " + e.getMessage());
+		}
 	}
 
 }
