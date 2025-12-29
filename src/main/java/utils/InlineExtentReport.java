@@ -46,10 +46,13 @@ public class InlineExtentReport {
 			Files.writeString(Paths.get(reportPath), html, StandardCharsets.UTF_8);
 
 			System.out.println("✔ Report successfully inlined for Jenkins.");
+			System.out.println(">>> InlineExtentReport called with: " + reportPath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("❌ Failed to inline report.");
 		}
+		System.out.println(">>> InlineExtentReport called with: " + reportPath);
+
 	}
 }
