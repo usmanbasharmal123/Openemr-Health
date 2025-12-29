@@ -159,21 +159,47 @@ pipeline {
             script {
 
                 // SIMPLE PLAIN TEXT EMAIL TEST
-                mail(
-                    to: env.EMAIL_RECIPIENTS,
-                    from: 'usman.basharmal123@gmail.com',
-                    subject: "Jenkins Plain Text Test Email - Build #${env.BUILD_NUMBER}",
-                    mimeType: 'text/plain',
-                    body: """Hello Usman,
+             mail(
+    to: 'usman.basharmal123@gmail.com',
+    subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
+    mimeType: 'text/html',
+    body: """
+<html>
+  <body style="font-family: Arial, sans-serif; color:#333;">
 
-This is a plain text test email sent from your Jenkins pipeline.
+    <h2 style="color:#2E86C1;">OpenEMR Automation Test Report</h2>
 
-If you receive this, Gmail is accepting pipeline emails.
+    <p>Hello Usman,</p>
+    <p>Your Jenkins pipeline has completed. Below is a summary of the test execution.</p>
 
-Regards,
-Jenkins CI
+    <h3>📊 Test Summary</h3>
+    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
+      <tr><th>Passed</th><td>${summary.passed}</td></tr>
+      <tr><th>Failed</th><td>${summary.failed}</td></tr>
+      <tr><th>Skipped</th><td>${summary.skipped}</td></tr>
+    </table>
+
+    <h3>📄 HTML Report</h3>
+    <p>
+      <a href="${reportUrl}" style="color:#1A73E8;">Click here to view the full HTML report</a>
+    </p>
+
+    <h3>📸 Screenshots</h3>
+    <p>You can view screenshots in the Jenkins build artifacts:</p>
+    <p>
+      <a href="${env.BUILD_URL}artifact/screenshots/" style="color:#1A73E8;">
+        View Screenshots Folder
+      </a>
+    </p>
+
+    <br/>
+    <p>Regards,<br/>Jenkins CI</p>
+
+  </body>
+</html>
 """
-                )
+)
+
             }
 
             echo "Pipeline completed. Plain text email sent."
