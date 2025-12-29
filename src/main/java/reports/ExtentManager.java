@@ -25,6 +25,10 @@ public class ExtentManager {
 
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
 
+		// ✅ Embed all assets directly into the HTML
+		spark.config().setEncoding("utf-8");
+		spark.config().setInlineResources(true);
+
 		// Theme + Branding
 		spark.config().setTheme(Theme.DARK);
 		spark.config().setDocumentTitle("OpenEMR Automation Report");
