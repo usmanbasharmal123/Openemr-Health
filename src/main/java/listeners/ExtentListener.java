@@ -10,9 +10,7 @@ import com.aventstack.extentreports.Status;
 
 import reports.ExtentManager;
 import reports.ExtentTestManager;
-import reports.ReportUtil;
 import utils.ConfigReader;
-import utils.InlineExtentReport;
 import utils.ScreenshotUtil;
 
 public class ExtentListener implements ITestListener {
@@ -99,12 +97,12 @@ public class ExtentListener implements ITestListener {
 		ExtentManager.getInstance().flush();
 
 		// Inline CSS/JS for Jenkins + Email
-		String latestReport = ReportUtil.getLatestReportPath("reports/");
-		if (latestReport != null) {
-			InlineExtentReport.inlineResources(latestReport);
-			System.out.println("✔ Inlined ExtentReport: " + latestReport);
-		} else {
-			System.out.println("❌ No ExtentReport found to inline.");
-		}
+//		String latestReport = ReportUtil.getLatestReportPath("reports/");
+//		if (latestReport != null) {
+//			InlineExtentReport.inlineResources(latestReport);
+//			System.out.println("✔ Inlined ExtentReport: " + latestReport);
+//		} else {
+//			System.out.println("❌ No ExtentReport found to inline.");
+//		}
 	}
 }
