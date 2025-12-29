@@ -111,12 +111,7 @@ pipeline {
             steps {
                 script {
                     publishHTML([
-                        reportDir: 'reports',
-                        reportFiles: '**/*.html',
-                        reportName: 'OpenEMR Automation Report',
-                        keepAll: true,
-                        alwaysLinkToLastBuild: true,
-                        allowMissing: true
+                       reportDir: 'reports', reportFiles: '**/*.html,**/*.css,**/*.js,**/*.png,**/*.svg', reportName: 'OpenEMR Automation Report', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: true
                     ])
                 }
             }
