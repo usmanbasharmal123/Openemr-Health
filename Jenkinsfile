@@ -251,7 +251,12 @@ pipeline {
 
     <h3>📄 HTML Report</h3>
     <p>
-      <a href="${reportUrl}" style="color:#4aa3ff;">Click here to view the full HTML report</a>
+      <a href="${reportUrl}"
+         style="background:#4aa3ff; color:white; padding:12px 20px; 
+                border-radius:6px; text-decoration:none; font-weight:bold;
+                display:inline-block; margin-top:10px;">
+         View Full HTML Report
+      </a>
     </p>
 
     <h3>📜 Logs</h3>
