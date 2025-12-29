@@ -112,16 +112,37 @@ pipeline {
             steps {
                 bat 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dmaven.test.failure.ignore=true'
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'reports/screenshots/*.png', allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'reports/**', fingerprint: true
-                    archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
+        }
+
+        stage('Inline ExtentReport') {
+            steps {
+                script {
+                    // Detect latest ExtentReport BEFORE archiving
+                    bat '''
+                    for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
+                        echo %%a > extent_name.txt
+                        goto :done
+                    )
+                    :done
+                    '''
+
+                    def extentFile = readFile('extent_name.txt').trim()
+                    def fullPath = "reports/${extentFile}"
+
+                    println "Inlining CSS/JS for: ${fullPath}"
+
+                    // CALL INLINE METHOD HERE
+                    utils.InlineExtentReport.inlineResources(fullPath)
                 }
             }
         }
 
-        // IMPORTANT: HTML Publisher REMOVED
+        stage('Archive Reports') {
+            steps {
+                archiveArtifacts artifacts: 'reports/**', fingerprint: true
+                archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
+            }
+        }
     }
 
     post {
@@ -139,7 +160,7 @@ pipeline {
                 def buildDuration = currentBuild.durationString.replace('and counting', '')
                 def screenshotsHtml = buildScreenshotGallery()
 
-                // Detect latest ExtentReport
+                // Detect latest ExtentReport (already inlined)
                 bat '''
                 for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
                     echo %%a > extent_name.txt
@@ -286,4 +307,5 @@ pipeline {
         }
     }
 }
+
 
