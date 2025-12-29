@@ -59,7 +59,7 @@ def buildScreenshotGallery() {
 }
 
 // -------------------------
-// SAFE Helper: Test Result Chart
+// SAFE Helper: Test Result Chart (not used in email now, but kept)
 // -------------------------
 def generateTestChart(summary) {
     return """
