@@ -78,27 +78,28 @@ pipeline {
 
     stages {
 
-stage('Checkout') {
-    steps {
-        deleteDir()  // Wipes workspace completely
+        // -------------------------
+        // FIXED CHECKOUT STAGE
+        // -------------------------
+        stage('Checkout') {
+            steps {
+                deleteDir()  // Completely wipe workspace
 
-        checkout([
-            $class: 'GitSCM',
-            branches: [[name: '*/main']],
-            userRemoteConfigs: [[
-                url: 'https://github.com/usmanbasharmal123/Openemr-Health.git',
-                credentialsId: 'github-credentials'   // replace with your ID
-            ]],
-            extensions: [
-                [$class: 'CleanBeforeCheckout'],
-                [$class: 'PruneStaleBranch'],
-                [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
-            ]
-        ])
-    }
-}
-
-
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/usmanbasharmal123/Openemr-Health.git',
+                        credentialsId: 'github-credentials'   // replace with your ID
+                    ]],
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout'],
+                        [$class: 'PruneStaleBranch'],
+                        [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
+                    ]
+                ])
+            }
+        }
 
         stage('Set up tools') {
             steps {
@@ -127,7 +128,12 @@ stage('Checkout') {
             steps {
                 script {
                     publishHTML([
-                       reportDir: 'reports', reportFiles: '**/*.html,**/*.css,**/*.js,**/*.png,**/*.svg', reportName: 'OpenEMR Automation Report', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: true
+                        reportDir: 'reports',
+                        reportFiles: '**/*.html,**/*.css,**/*.js,**/*.png,**/*.svg',
+                        reportName: 'OpenEMR Automation Report',
+                        keepAll: true,
+                        alwaysLinkToLastBuild: true,
+                        allowMissing: true
                     ])
                 }
             }
