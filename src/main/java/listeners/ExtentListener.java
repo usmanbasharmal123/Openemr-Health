@@ -127,6 +127,7 @@ public class ExtentListener implements ITestListener {
 
 		String latestReport = ReportUtil.getLatestReportPath("reports/");
 		InlineExtentReport.inlineResources(latestReport);
+		System.out.println(">>> ExtentListener onFinish() reached");
 
 	}
 
