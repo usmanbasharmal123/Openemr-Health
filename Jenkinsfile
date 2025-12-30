@@ -269,8 +269,8 @@ pipeline {
 
             }
 
-            // Publish Allure Report in Jenkins
-            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            // ⭐ FIXED: Allure now uses the Jenkins-installed commandline
+            allure includeProperties: false, jdk: '', commandline: 'Allure-2.29.0', results: [[path: 'allure-results']]
 
             echo "Pipeline completed. Allure + Email report sent."
         }
