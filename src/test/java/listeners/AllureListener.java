@@ -10,6 +10,7 @@ import org.testng.ITestResult;
 
 import utils.AllureUtils;
 import utils.LoggerFactory;
+import utils.ScreenshotUtil;
 
 public class AllureListener implements ITestListener {
 
@@ -49,6 +50,10 @@ public class AllureListener implements ITestListener {
 			WebDriver driver = (WebDriver) driverField.get(testInstance);
 
 			if (driver != null) {
+				// Save screenshot for email thumbnails
+				ScreenshotUtil.captureScreenshot(driver, result.getMethod().getMethodName());
+
+				// Attach screenshot to Allure report
 				AllureUtils.takeScreenshot(driver);
 			} else {
 				log.error("Driver is NULL — cannot capture screenshot.");
