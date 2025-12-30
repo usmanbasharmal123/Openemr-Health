@@ -1,0 +1,10 @@
+base\BasePage.class
+utils\DebugExtentReport.class
+driver\DriverFactory.class
+constants\FrameworkConstants.class
+utils\Log4j2ConfigLocator.class
+utils\AllureUtils.class
+utils\WaitHelper.class
+utils\LoggerFactory.class
+utils\ConfigReader.class
+utils\ScreenshotUtil.class

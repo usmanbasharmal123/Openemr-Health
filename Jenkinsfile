@@ -71,8 +71,8 @@ pipeline {
     }
 
     environment {
-        MAVEN_TOOL = 'Maven-3'
-        JDK_TOOL   = 'JDK-21'
+        MAVEN_TOOL       = 'Maven-3'
+        JDK_TOOL         = 'JDK-21'
         EMAIL_RECIPIENTS = 'usman.basharmal123@gmail.com'
     }
 
@@ -133,9 +133,12 @@ pipeline {
         always {
             script {
 
-                def summary = getTestSummary()
-                def buildDuration = currentBuild.durationString.replace('and counting', '')
+                def summary        = getTestSummary()
+                def buildDuration  = currentBuild.durationString.replace('and counting', '')
                 def screenshotsHtml = buildScreenshotGallery()
+
+                // URL to Jenkins Allure Report (correct CSS/JS)
+                def allureReportUrl = "${env.BUILD_URL}allure"
 
                 // Extract failed tests
                 def failureRows = ""
@@ -238,6 +241,21 @@ pipeline {
         ${failureRows}
     </table>
 
+    <h3>📄 Full Allure Report</h3>
+    <p>
+      <a href="${allureReportUrl}"
+         style="background:#4aa3ff; color:white; padding:12px 20px;
+                border-radius:6px; text-decoration:none; font-weight:bold;
+                display:inline-block; margin-top:10px;">
+         View Allure Report (Full CSS & JS)
+      </a>
+    </p>
+
+    <h3>📜 Logs</h3>
+    <p>
+      <a href="${env.BUILD_URL}console" style="color:#4aa3ff;">View Jenkins Console Log</a>
+    </p>
+
     <h3>📸 Screenshot Thumbnails (Allure)</h3>
     ${screenshotsHtml}
 
@@ -251,7 +269,7 @@ pipeline {
 
             }
 
-            // ⭐ Publish Allure Report in Jenkins
+            // Publish Allure Report in Jenkins
             allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
 
             echo "Pipeline completed. Allure + Email report sent."

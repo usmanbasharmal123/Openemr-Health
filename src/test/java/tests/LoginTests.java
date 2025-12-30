@@ -26,4 +26,9 @@ public class LoginTests extends BaseTest {
 		Assert.assertTrue(title.contains("OpenEMR"), "Dashboard title does not contain 'OpenEMR'");
 		log.info("=== Completed test: validLoginTest ===");
 	}
+
+	@Test
+	public void failTest() {
+		Assert.fail("Intentional failure to test Allure screenshot");
+	}
 }

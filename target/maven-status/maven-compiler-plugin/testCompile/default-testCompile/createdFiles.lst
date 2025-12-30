@@ -1,0 +1,8 @@
+base\BaseTest.class
+pages\PatientPage.class
+tests\SimpleLogTest.class
+tests\DashboardTest.class
+pages\LoginPage.class
+tests\LoginTests.class
+pages\DashboardPage.class
+listeners\AllureListener.class
