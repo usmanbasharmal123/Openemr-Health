@@ -1,7 +1,6 @@
 // -------------------------
-// SAFE Helper: Extract Test Summary (string parsing only)
+// SAFE Helper: Extract Test Summary (TestNG XML)
 // -------------------------
-
 def getTestSummary() {
     def summary = [passed: 0, failed: 0, skipped: 0]
 
@@ -23,11 +22,11 @@ def getTestSummary() {
 }
 
 // -------------------------
-// SAFE Helper: Screenshot Gallery (UPDATED PATH)
+// SAFE Helper: Screenshot Gallery (Allure Attachments)
 // -------------------------
 def buildScreenshotGallery() {
 
-    bat(script: 'dir /b reports\\screenshots\\*.png > screenshot_list.txt', returnStatus: true)
+    bat(script: 'dir /b allure-results\\*.png > screenshot_list.txt', returnStatus: true)
 
     if (!fileExists('screenshot_list.txt')) {
         return "<p>No screenshots found.</p>"
@@ -42,7 +41,7 @@ def buildScreenshotGallery() {
 
     list.each { fileName ->
         if (fileName.trim()) {
-            def fileUrl = "${env.BUILD_URL}artifact/reports/screenshots/${fileName}"
+            def fileUrl = "${env.BUILD_URL}artifact/allure-results/${fileName}"
 
             html += """
                 <td style='padding:10px; text-align:center;'>
@@ -115,11 +114,9 @@ pipeline {
             }
         }
 
-
-
         stage('Archive Reports') {
             steps {
-                archiveArtifacts artifacts: 'reports/**', fingerprint: true
+                archiveArtifacts artifacts: 'allure-results/**', fingerprint: true
                 archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
             }
         }
@@ -139,20 +136,6 @@ pipeline {
                 def summary = getTestSummary()
                 def buildDuration = currentBuild.durationString.replace('and counting', '')
                 def screenshotsHtml = buildScreenshotGallery()
-
-                // Detect latest ExtentReport (already inlined)
-                bat '''
-                for /f "delims=" %%a in ('dir /b /o-d reports\\ExtentReport_*.html') do (
-                    echo %%a > extent_name.txt
-                    goto :done
-                )
-                :done
-                '''
-
-                def extentFile = readFile('extent_name.txt').trim()
-
-                // RAW ARTIFACT URL (works perfectly)
-                def extentReportUrl = "${env.BUILD_URL}artifact/reports/${extentFile}"
 
                 // Extract failed tests
                 def failureRows = ""
@@ -211,7 +194,7 @@ pipeline {
 
                 // Send email
                 mail(
-                    to: 'usman.basharmal123@gmail.com',
+                    to: env.EMAIL_RECIPIENTS,
                     subject: "OpenEMR Automation Report - Build #${env.BUILD_NUMBER}",
                     mimeType: 'text/html',
                     body: """
@@ -255,22 +238,7 @@ pipeline {
         ${failureRows}
     </table>
 
-    <h3>📄 Full ExtentReport</h3>
-    <p>
-      <a href="${extentReportUrl}"
-         style="background:#4aa3ff; color:white; padding:12px 20px;
-                border-radius:6px; text-decoration:none; font-weight:bold;
-                display:inline-block; margin-top:10px;">
-         View Latest ExtentReport
-      </a>
-    </p>
-
-    <h3>📜 Logs</h3>
-    <p>
-      <a href="${env.BUILD_URL}console" style="color:#4aa3ff;">View Jenkins Console Log</a>
-    </p>
-
-    <h3>📸 Screenshot Thumbnails</h3>
+    <h3>📸 Screenshot Thumbnails (Allure)</h3>
     ${screenshotsHtml}
 
     <br/>
@@ -283,9 +251,10 @@ pipeline {
 
             }
 
-            echo "Pipeline completed. Enterprise HTML email sent."
+            // ⭐ Publish Allure Report in Jenkins
+            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+
+            echo "Pipeline completed. Allure + Email report sent."
         }
     }
 }
-
-

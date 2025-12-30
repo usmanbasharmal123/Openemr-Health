@@ -22,6 +22,7 @@
         <log4j2.version>2.23.1</log4j2.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <commons-io.version>2.16.1</commons-io.version>
+        <allure.version>2.24.0</allure.version>
     </properties>
 
     <dependencies>
@@ -38,6 +39,7 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Log4j2 -->
@@ -73,11 +75,11 @@
             <version>${commons-io.version}</version>
         </dependency>
 
-        <!-- ⭐ ExtentReports 4.x (Maven Central, no JitPack needed) -->
+        <!-- ⭐ Allure TestNG -->
         <dependency>
-            <groupId>com.aventstack</groupId>
-            <artifactId>extentreports</artifactId>
-            <version>4.1.7</version>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
         </dependency>
 
     </dependencies>
@@ -85,6 +87,7 @@
     <build>
         <plugins>
 
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -95,6 +98,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Surefire (TestNG runner) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -103,6 +107,9 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <allure.results.directory>allure-results</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
 

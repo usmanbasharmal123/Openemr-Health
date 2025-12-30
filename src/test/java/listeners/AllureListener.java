@@ -1,15 +1,19 @@
 package listeners;
 
+import java.lang.reflect.Field;
+
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import utils.AllureUtils;
 import utils.LoggerFactory;
 
-public class TestListener implements ITestListener {
+public class AllureListener implements ITestListener {
 
-	private static final Logger log = LoggerFactory.getLogger(TestListener.class);
+	private static final Logger log = LoggerFactory.getLogger(AllureListener.class);
 
 	@Override
 	public void onStart(ITestContext context) {
@@ -34,6 +38,25 @@ public class TestListener implements ITestListener {
 	@Override
 	public void onTestFailure(ITestResult result) {
 		log.error("Test Failed: {}", result.getMethod().getMethodName(), result.getThrowable());
+
+		try {
+			Object testInstance = result.getInstance();
+
+			// BaseTest contains the protected WebDriver driver;
+			Field driverField = testInstance.getClass().getSuperclass().getDeclaredField("driver");
+			driverField.setAccessible(true);
+
+			WebDriver driver = (WebDriver) driverField.get(testInstance);
+
+			if (driver != null) {
+				AllureUtils.takeScreenshot(driver);
+			} else {
+				log.error("Driver is NULL — cannot capture screenshot.");
+			}
+
+		} catch (Exception e) {
+			log.error("Unable to capture screenshot via reflection: {}", e.getMessage());
+		}
 	}
 
 	@Override
