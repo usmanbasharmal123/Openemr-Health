@@ -14,6 +14,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import driver.DriverFactory;
+import pages.DashboardPage;
+import pages.LoginPage;
 import utils.LoggerFactory;
 import utils.ScreenshotUtil;
 
@@ -52,6 +54,11 @@ public abstract class BaseTest {
 
 		baseLogger.info("Driver initialized in BaseTest");
 		log.info("Driver initialized in BaseTest");
+	}
+
+	public DashboardPage loginToOpenEMR() {
+		LoginPage login = new LoginPage(driver);
+		return login.enterUsername("XET-admin-88").enterPassword("B@omar.1234567").clickLogin();
 	}
 
 	@AfterMethod(alwaysRun = true)

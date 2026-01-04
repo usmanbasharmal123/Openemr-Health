@@ -1,0 +1,197 @@
+<html lang="en"><head>
+    
+    <title>OpenEMR Login</title>
+        
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="shortcut icon" href="/openemr/public/images/logos/core/favicon/favicon.ico?t=1742713071">
+
+<link rel="stylesheet" href="/openemr/public/themes/style_light.css?v=76">
+
+<script src="/openemr/public/assets/jquery/dist/jquery.min.js?v=76" type="text/javascript"></script>
+<script src="/openemr/public/assets/bootstrap/dist/js/bootstrap.bundle.min.js?v=76" type="text/javascript"></script>
+<script src="/openemr/library/js/utility.js?v=76" type="text/javascript"></script>
+<script src="/openemr/library/textformat.js?v=76" type="text/javascript"></script>
+<script src="/openemr/library/dialog.js?v=76" type="text/javascript"></script>
+
+
+
+    <script src="/openemr/interface/product_registration/product_registration_service.js?v=76"></script>
+<script src="/openemr/interface/product_registration/product_registration_controller.js?v=76"></script>
+<script type="text/javascript">
+    const registrationTranslations = {"title":"OpenEMR Product Registration","pleaseProvideValidEmail":"Please provide a valid email address","success":"Success","registeredSuccess":"Your installation of OpenEMR has been registered","submit":"Submit","noThanks":"No Thanks","registeredEmail":"Registered email","registeredId":"Registered id","genericError":"Error. Try again later","closeTooltip":""};
+    const registrationConstants = {"webroot":"\/openemr"};
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('authUser').focus();
+    });
+
+    $(document).ready(init());
+
+    function init() {
+        var productRegistrationController = new ProductRegistrationController();
+        productRegistrationController.getProductRegistrationStatus(function (err, data) {
+            if (err) { return; }
+
+            if (data.statusAsString === 'UNREGISTERED') {
+                productRegistrationController.showProductRegistrationModal();
+            }
+        });
+    }
+
+    function transmit_form(element) {
+        // disable submit button to insert a notification of working
+        element.disabled = true;
+        // nothing fancy. mainly for mobile.
+        element.innerHTML = '<i class="fa fa-circle-notch fa-spin mx-1"></i><span class="sr-only">' + jsText("Authenticating") + '</span>';
+                document.cookie = "OpenEMR=aV6ENJVifNkrt3C7JZor4LnVPS6ly%2Cv7scfGLyt9%2Cnca2Wwo; path=\/openemr\/; domain=; expires=Thu, 01 Jan 1970 00:33:45 +0000; SameSite=Strict";
+                document.forms[0].submit();
+        return true;
+    }
+</script>
+
+        <style type="text/css">
+        .band,
+        .box,
+        .vertical-band {
+            background-color: var(--light);
+        }
+    </style>
+    
+<style type="text/css">
+/* Custom CSS to be moved after the BS5 migration, this helps responsiveness */
+@media (min-width: 768px) {
+    .vertical-band {
+        max-width: 36%;
+    }
+}
+</style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passInput = document.getElementById('clearPass');
+            const toggle = document.getElementById('password-icon');
+            toggle.addEventListener('click', function () {
+                const isPassword = passInput.getAttribute('type') === 'password';
+                passInput.setAttribute('type', isPassword ? 'text' : 'password');
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
+</head>
+<body>
+
+
+<div class="vh-100 p-5 d-flex flex-column justify-content-center mx-auto vertical-band">
+    <div class="align-items-center">
+        <div class="d-flex flex-column justify-content-between align-items-center mb-5  ">
+        <div class="flex-fill w-50">
+        <img src="/openemr/public/images/logos/core/login/primary/logo.png?t=1742713071" class="img-fluid" alt="">
+    </div>
+        </div>
+        
+<p class="text-center lead">The most popular open-source Electronic Health Record and Medical Practice Management solution.</p>
+
+
+
+<form method="POST" id="login_form" autocomplete="off" action="../main/main_screen.php?auth=login&amp;site=default" target="_top" name="login_form">
+    <input type="hidden" name="new_login_session_management" value="1">
+    <input type="hidden" name="languageChoice" value="1">
+    <div id="standard-auth-username" class="form-group row">
+    <label for="authUser" class=" col-form-label col-sm-4">Username</label>
+    <div class="col">
+        <input type="text" class="form-control" id="authUser" name="authUser" placeholder="Username">
+    </div>
+</div>
+    <div id="standard-auth-password" class="form-group row">
+    <label for="clearPass" class=" col-form-label col-sm-4">Password</label>
+    <div class="col input-group">
+        <input type="password" class="form-control" id="clearPass" name="clearPass" placeholder="Password">
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fa fa-eye" id="password-icon" style="cursor: pointer;"></i>
+            </span>
+        </div>
+    </div>
+</div>
+    
+    <div class="form-group row">
+    <label for="language" class=" col-form-label col-sm-4">Language</label>
+    <div class="col">
+        <select class="form-control" name="languageChoice" size="1">
+            <option value="1" selected="">Default - English (Standard)</option>
+                            <option value="28">Albanian</option>
+                            <option value="20">Arabic</option>
+                            <option value="13">Armenian</option>
+                            <option value="14">Bahasa Indonesia</option>
+                            <option value="10">Chinese (Simplified)</option>
+                            <option value="11">Chinese (Traditional)</option>
+                            <option value="29">Czech</option>
+                            <option value="21">Danish</option>
+                            <option value="6">Dutch</option>
+                            <option value="36">English (Australian)</option>
+                            <option value="16">English (Indian)</option>
+                            <option value="1">English (Standard)</option>
+                            <option value="33">Finnish</option>
+                            <option value="9">French (Canadian)</option>
+                            <option value="8">French (Standard)</option>
+                            <option value="5">German</option>
+                            <option value="15">Greek</option>
+                            <option value="7">Hebrew</option>
+                            <option value="25">Hindi</option>
+                            <option value="24">Italian</option>
+                            <option value="32">Japanese</option>
+                            <option value="34">Marathi</option>
+                            <option value="31">Persian</option>
+                            <option value="23">Polish</option>
+                            <option value="19">Portuguese (Angolan)</option>
+                            <option value="18">Portuguese (Brazilian)</option>
+                            <option value="17">Portuguese (European)</option>
+                            <option value="26">Romanian</option>
+                            <option value="12">Russian</option>
+                            <option value="4">Spanish (Latin American)</option>
+                            <option value="3">Spanish (Spain)</option>
+                            <option value="2">Swedish</option>
+                            <option value="35">Tamil</option>
+                            <option value="22">Turkish</option>
+                            <option value="30">Ukrainian</option>
+                            <option value="27">Vietnamese</option>
+                    </select>
+    </div>
+</div>
+        <div class="form-group d-flex justify-content-between">
+    <button id="login-button" class="btn btn-primary flex-fill" type="submit" onclick="transmit_form(this)">Login</button>
+    </div>
+
+    </form>
+            <p class="text-center small">
+        <a class="" href="../../acknowledge_license_cert.html" target="main">Acknowledgments, Licensing and Certification</a>
+    </p>
+        
+    </div>
+    </div>
+
+
+
+
+        <div class="product-registration-modal modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"></div>
+            <div class="modal-body">
+                <p class="context">
+                    Register your installation with OpenEMR Foundation to receive important notifications, such as security fixes and new release announcements.
+                </p>
+                <input placeholder="email" type="email" class="email w-100 text-body form-control">
+                <p class="message font-italic"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary submit">Submit</button>
+                <button type="button" class="btn btn-secondary nothanks">No Thanks</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body></html>

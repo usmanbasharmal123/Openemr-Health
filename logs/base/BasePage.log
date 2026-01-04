@@ -1,80 +1,8 @@
-2025-12-28 10:38:54.728 [main] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 10:38:54.734 [main] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 10:38:54.757 [main] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 10:38:54.984 [main] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 10:38:55.126 [main] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 10:38:55.276 [main] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 10:38:55.284 [main] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 10:38:55.285 [main] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 10:50:27.839 [main] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 10:50:27.845 [main] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 10:50:27.865 [main] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 10:50:28.036 [main] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 10:50:28.173 [main] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 10:50:33.006 [main] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 10:50:33.006 [main] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 10:50:33.007 [main] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 10:55:09.862 [main] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 10:55:09.867 [main] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 10:55:09.887 [main] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 10:55:10.061 [main] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 10:55:10.219 [main] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 10:55:15.144 [main] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 10:55:15.145 [main] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 10:55:15.147 [main] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:19:40.705 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:19:40.713 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:19:40.752 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:19:40.927 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:19:41.059 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:19:41.198 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:19:41.198 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:19:41.199 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:21:52.867 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:21:52.872 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:21:52.897 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:21:53.080 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:21:53.210 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:21:53.342 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:21:53.342 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:21:53.343 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:38:19.899 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:38:19.906 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:38:19.929 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:38:20.115 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:38:20.243 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:38:20.371 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:38:20.371 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:38:20.372 [TestNG-test-OpenEMR Regression-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:40:10.249 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:40:10.261 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:40:10.331 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:40:10.864 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:40:10.903 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:40:10.962 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:40:10.980 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:40:11.557 [TestNG-tests-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:40:11.763 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:40:11.856 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:40:11.857 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:40:11.859 [TestNG-tests-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:40:12.135 [TestNG-tests-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:40:21.668 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:40:21.671 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:40:21.675 [TestNG-tests-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:43:51.444 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:43:51.461 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:43:51.513 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:43:51.698 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:43:51.843 [TestNG-tests-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:43:57.406 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:43:57.407 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:43:57.410 [TestNG-tests-1] INFO  BasePageLogger - BasePage.getPageTitle() called
-2025-12-28 12:52:32.248 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
-2025-12-28 12:52:32.262 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
-2025-12-28 12:52:32.310 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Username Input
-2025-12-28 12:52:32.902 [TestNG-tests-1] INFO  BasePageLogger - BasePage.type() called for element: Password Input
-2025-12-28 12:52:33.121 [TestNG-tests-1] INFO  BasePageLogger - BasePage.click() called for element: Login Button
-2025-12-28 12:52:39.848 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
-2025-12-28 12:52:39.849 [TestNG-tests-1] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
-2025-12-28 12:52:39.850 [TestNG-tests-1] INFO  BasePageLogger - BasePage.getPageTitle() called
+2026-01-02 13:03:11.131 [main] INFO  BasePageLogger - BasePage constructor started for child: LoginPage
+2026-01-02 13:03:11.138 [main] INFO  BasePageLogger - BasePage constructor completed for child: LoginPage
+2026-01-02 13:03:11.157 [main] INFO  BasePageLogger - BasePage.type() called for element: Username Input
+2026-01-02 13:03:11.334 [main] INFO  BasePageLogger - BasePage.type() called for element: Password Input
+2026-01-02 13:03:11.468 [main] INFO  BasePageLogger - BasePage.click() called for element: Login Button
+2026-01-02 13:03:11.583 [main] INFO  BasePageLogger - BasePage constructor started for child: DashboardPage
+2026-01-02 13:03:11.591 [main] INFO  BasePageLogger - BasePage constructor completed for child: DashboardPage
+2026-01-02 13:03:11.592 [main] INFO  BasePageLogger - BasePage.getPageTitle() called

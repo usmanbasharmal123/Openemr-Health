@@ -27,26 +27,25 @@ public class DashboardTest extends BaseTest {
 
 	@Test(description = "Test Dashboard Page Logging")
 	public void testDashboardLogging() {
+
 		ThreadContext.put("logFolder", "pages");
 		ThreadContext.put("className", "DashboardPage");
 
-		DashboardPage dashboard = new DashboardPage(driver);
+		// Login first (this was missing)
+		DashboardPage dashboard = loginToOpenEMR();
+
+		// Now the dashboard is loaded and Patient menu exists
 		dashboard.navigateToPatientPage();
 
-		// Check if the log file is created
-		File logFile = new File("logs/pages/DashboardPage.log"); // Adjust the path based on your configuration
-
-		// Validate the log file creation
+		File logFile = new File("logs/pages/DashboardPage.log");
 		Assert.assertTrue(logFile.exists(), "Log file for DashboardPage should exist.");
 
-		// Log output for verification
 		if (logFile.exists()) {
 			log.info("Log file created successfully: " + logFile.getAbsolutePath());
 		} else {
 			log.error("Failed to create log file.");
 		}
 
-		// Clear ThreadContext after logging
 		ThreadContext.clearAll();
 	}
 

@@ -7,6 +7,16 @@
   </listeners>
   <test thread-count="3" parallel="tests" name="OpenEMR Regression(failed)">
     <classes>
+      <class name="tests.DashboardTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
+          <include name="beforeSuite"/>
+          <include name="afterSuite"/>
+          <include name="testDashboardLogging"/>
+        </methods>
+      </class> <!-- tests.DashboardTest -->
       <class name="tests.LoginTests">
         <methods>
           <include name="setUp"/>

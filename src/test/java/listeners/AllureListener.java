@@ -43,24 +43,29 @@ public class AllureListener implements ITestListener {
 		try {
 			Object testInstance = result.getInstance();
 
-			// BaseTest contains the protected WebDriver driver;
+			// BaseTest contains the protected WebDriver driver
 			Field driverField = testInstance.getClass().getSuperclass().getDeclaredField("driver");
 			driverField.setAccessible(true);
 
 			WebDriver driver = (WebDriver) driverField.get(testInstance);
 
 			if (driver != null) {
+
 				// Save screenshot for email thumbnails
 				ScreenshotUtil.captureScreenshot(driver, result.getMethod().getMethodName());
 
-				// Attach screenshot to Allure report
+				// Attach Allure artifacts
 				AllureUtils.takeScreenshot(driver);
+				AllureUtils.attachBrowserConsoleLogs(driver);
+				AllureUtils.attachPageSource(driver);
+				AllureUtils.attachNetworkLogs(driver);
+
 			} else {
-				log.error("Driver is NULL — cannot capture screenshot.");
+				log.error("Driver is NULL — cannot capture logs.");
 			}
 
 		} catch (Exception e) {
-			log.error("Unable to capture screenshot via reflection: {}", e.getMessage());
+			log.error("Unable to capture logs via reflection: {}", e.getMessage());
 		}
 	}
 

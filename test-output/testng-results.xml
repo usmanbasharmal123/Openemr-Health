@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="2" passed="1" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-12-29T20:44:02 EST" name="OpenEMR Automation Suite" finished-at="2025-12-29T20:44:19 EST" duration-ms="16700">
+  <suite started-at="2026-01-02T13:03:05 EST" name="Default suite" finished-at="2026-01-02T13:03:16 EST" duration-ms="11045">
     <groups>
     </groups>
-    <test started-at="2025-12-29T20:44:02 EST" name="OpenEMR Regression" finished-at="2025-12-29T20:44:19 EST" duration-ms="16700">
+    <test started-at="2026-01-02T13:03:05 EST" name="Default test" finished-at="2026-01-02T13:03:16 EST" duration-ms="11045">
       <class name="tests.LoginTests">
-        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:02 EST" name="beforeSuite" finished-at="2025-12-29T20:44:02 EST" duration-ms="21" status="PASS">
+        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:05 EST" name="beforeSuite" finished-at="2026-01-02T13:03:05 EST" duration-ms="35" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeSuite -->
-        <test-method is-config="true" signature="setUp(java.lang.reflect.Method)[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:02 EST" name="setUp" finished-at="2025-12-29T20:44:08 EST" duration-ms="5892" status="PASS">
+        <test-method is-config="true" signature="setUp(java.lang.reflect.Method)[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:05 EST" name="setUp" finished-at="2026-01-02T13:03:08 EST" duration-ms="3279" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -22,7 +22,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="failTest()[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:08 EST" name="failTest" finished-at="2025-12-29T20:44:08 EST" duration-ms="110" status="FAIL">
+        <test-method signature="failTest()[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:08 EST" name="failTest" description="Intentional failure to test Allure screenshot" finished-at="2026-01-02T13:03:08 EST" duration-ms="44" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[Intentional failure to test Allure screenshot]]>
@@ -30,7 +30,7 @@
             <full-stacktrace>
               <![CDATA[java.lang.AssertionError: Intentional failure to test Allure screenshot
 at org.testng.Assert.fail(Assert.java:111)
-at tests.LoginTests.failTest(LoginTests.java:32)
+at tests.LoginTests.failTest(LoginTests.java:44)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -45,30 +45,36 @@ at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 at org.testng.TestRunner.privateRun(TestRunner.java:739)
 at org.testng.TestRunner.run(TestRunner.java:614)
 at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:463)
-at org.testng.internal.thread.ThreadUtil.lambda$execute$0(ThreadUtil.java:64)
-at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
-at java.base/java.lang.Thread.run(Thread.java:1583)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
 ]]>
             </full-stacktrace>
           </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
         </test-method> <!-- failTest -->
-        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:08 EST" name="tearDown" finished-at="2025-12-29T20:44:09 EST" duration-ms="1010" status="PASS">
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:09 EST" name="tearDown" finished-at="2026-01-02T13:03:09 EST" duration-ms="383" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=failTest status=FAILURE method=LoginTests.failTest()[pri:0, instance:tests.LoginTests@6d1d4d7] output={null}]]]>
+                <![CDATA[[TestResult name=failTest status=FAILURE method=LoginTests.failTest()[pri:0, instance:tests.LoginTests@5c77053b] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="setUp(java.lang.reflect.Method)[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:09 EST" name="setUp" finished-at="2025-12-29T20:44:13 EST" duration-ms="3168" status="PASS">
+        <test-method is-config="true" signature="setUp(java.lang.reflect.Method)[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:09 EST" name="setUp" finished-at="2026-01-02T13:03:11 EST" duration-ms="1728" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -79,26 +85,26 @@ at java.base/java.lang.Thread.run(Thread.java:1583)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="validLoginTest()[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:13 EST" name="validLoginTest" description="Valid login to OpenEMR" finished-at="2025-12-29T20:44:18 EST" duration-ms="5657" status="PASS">
+        <test-method signature="validLoginTest()[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:11 EST" name="validLoginTest" description="Valid login to OpenEMR" finished-at="2026-01-02T13:03:16 EST" duration-ms="5277" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- validLoginTest -->
-        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:18 EST" name="tearDown" finished-at="2025-12-29T20:44:19 EST" duration-ms="258" status="PASS">
+        <test-method is-config="true" signature="tearDown(org.testng.ITestResult)[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:16 EST" name="tearDown" finished-at="2026-01-02T13:03:16 EST" duration-ms="156" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=validLoginTest status=SUCCESS method=LoginTests.validLoginTest()[pri:0, instance:tests.LoginTests@6d1d4d7] output={null}]]]>
+                <![CDATA[[TestResult name=validLoginTest status=SUCCESS method=LoginTests.validLoginTest()[pri:0, instance:tests.LoginTests@5c77053b] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="afterSuite()[pri:0, instance:tests.LoginTests@6d1d4d7]" started-at="2025-12-29T20:44:19 EST" name="afterSuite" finished-at="2025-12-29T20:44:19 EST" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:tests.LoginTests@5c77053b]" started-at="2026-01-02T13:03:16 EST" name="afterSuite" finished-at="2026-01-02T13:03:16 EST" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterSuite -->
       </class> <!-- tests.LoginTests -->
-    </test> <!-- OpenEMR Regression -->
-  </suite> <!-- OpenEMR Automation Suite -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
 </testng-results>

@@ -19,6 +19,7 @@
     <test name="OpenEMR Regression">
         <classes>
             <class name="tests.LoginTests"/>
+            <class name="tests.DashboardTest"/>
         </classes>
     </test>
    <!-- <test name="Report Test"> <classes> <class name="tests.ReportTestDemo"/> </classes> </test>-->
